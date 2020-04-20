@@ -1,0 +1,486 @@
+\documentclass[pra,showkeys,twocolumn,showpacs]{revtex4-1}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{color}
+\usepackage{soul}
+% \usepackage{floatflt}
+\usepackage{graphicx}
+\DeclareMathOperator{\tr}{Tr}
+\newcommand*{\eq}[1]{(\ref{#1})}
+\newcommand*{\eqs}[2]{(\ref{#1})--(\ref{#2})}
+\newcommand{\exi}{\tr{\{e^{-\frac\beta2\sum_k\lambda_k\gamma_k^\dag\gamma_k}\}}}
+\renewcommand{\l}{\left(}
+\renewcommand{\r}{\right)}
+
+\begin{document}
+\title{Quantum assisted unsupervised data clustering on the basis of neural networks}
+
+\author{I.~D.~Lazarev} 
+\affiliation{Institute of Problems of Chemical Physics of Russian Academy of Sciences, Acad. Semenov av. 1, Chernogolovka, Moscow Region, Russia, 142432}
+\affiliation{ Faculty of Fundamental Physical-Chemical Engineering, Lomonosov Moscow State University, GSP-1, Moscow, Russia 119991}
+
+\author{Marek Narozniak}
+\affiliation{New York University Shanghai, 1555 Century Ave, Pudong, Shanghai 200122, China}
+\affiliation{Department of Physics, New York University, New York, NY, 10003, USA.}
+
+\author{Tim Byrnes}
+\affiliation{New York University Shanghai, 1555 Century Ave, Pudong, Shanghai 200122, China}
+\affiliation{State Key Laboratory of Precision Spectroscopy, School of Physical and Material Sciences, East China Normal University, Shanghai 200062, China}
+\affiliation{NYU-ECNU Institute of Physics at NYU Shanghai, 3663 Zhongshan Road North, Shanghai 200062, China}
+\affiliation{National Institute of Informatics, 2-1-2 Hitotsubashi, Chiyoda-ku, Tokyo 101-8430, Japan}
+\affiliation{Department of Physics, New York University, New York, NY 10003, USA}
+
+
+\author{A.~N.~Pyrkov} 
+\email{Email address:pyrkov@icp.ac.ru}
+\affiliation{Institute of Problems of Chemical Physics of Russian Academy of Sciences, Acad. Semenov av. 1, Chernogolovka, Moscow Region, Russia, 142432}
+
+
+\date{\today}
+
+\begin{abstract}
+	Unsupervised machine learning is one of the main directions in the area of artificial intelligence. 
+	Here, we propose a realization of quantum assisted unsupervised data clustering on the basis of artificial neural network called a self-organizing feature map. 
+	We make a proof-of-concept realization of one of the crucial parts of the approach on IBM quantum machine and show that it allows us to reduce number of calculations in a number of clusters. 
+	We compare the results with the classical algorithm on a toy example of unsupervised text clustering.  
+\end{abstract}
+
+
+%\pacs{}
+\maketitle
+
+
+\section{Introduction}
+The combination of big data and artificial intelligence ---  dubbed the fourth industrial revolution --- has profoundly affected the modern economy in a plethora of different ways from robotics to agriculture \cite{Lecun2015, ghahramani2015,schwab2017,esteva2019, tyrsa2017}. 
+Contemporary artificial intelligence methods based on neural networks also have the potential to enhance the role of novel analytical methods in science and engineering \cite{kaggle2014, radovic2018, butler2018, radovic2018}. 
+Paradoxically, the exact mechanism of why neural networks are so powerful remain unknown (in many cases it is regarded as a black box).  
+It has been speculated that limits to the neural network approach based on the computational power of von Neumann architecture are being approached, and improvements appear only due to heuristic escalation of complexity \cite{marcus2018,sze2017,kourtis2020}.
+In particularly, the self-organizing feature map (SOFM) \cite{kohonen1990,kohonen1996,kohonen1997}, is a type of artificial neural network (ANN) that is trained in an unsupervised manner. 
+SOFMs are used in many areas \cite{vilibic2016, guido1998, doszkocs1990, jones2012,mori2019,corsello2017,zhu2018,chea2016} and in comparison with many other artificial neural networks they apply competitive learning and preserve the topological properties of the input space \cite{kiviluotoa1996}. 
+The SOFMs with a small number of nodes are similar to the K-means algorithm but for larger SOFMs they represent data in a fundamentally topological way that allows one to do dimensionality reduction.
+Once it is trained, the map can classify a vector from the input space by finding the node with the smallest distance metric. 
+
+Meanwhile, there has been much interest recently in applying quantum computing techniques to machine learning \cite{dunjko2018, biamonte2017, schuld2014, carleo2019}. 
+In the early stage, the main focus in QML was on the use of quantum computers to perform some basic linear algebra subroutines faster (such as Fourier transform and solving systems of linear equations \cite{wiebe2012,harrow2009,childs2017}), 
+open up the possibilities for exponential speed-ups utilizing quantum phenomena such as quantum entanglement and quantum superposition over classical counterparts \cite{biamonte2017, schuld2014} and,
+in the result, quantum versions were developed for linear regression, principal component analysis, support vector machine, K-means algorithm and so on \cite{lloyd2013,lloyd2014,dunjko2016,paparo2014,rebentrost2014}. 
+Recently,  a number of shifts occurred and the hottest trend migrated to developing quantum neural networks \cite{kamruzzaman2019, schuld2014b, jeswal2019}. 
+The shift was inspired with the progress in experimental quantum computing when it became possible to play around with parametrized quantum circuits, whose parameters behave much like the weights of a neural network \cite{lewenstein1994}. 
+In particular, quantum algorithms for training and evaluating feedforward neural networks, one of the most usable neural network model, was developed \cite{allcock2018, tacchino2019}. 
+Recent results connected classical Bayesian approach to deep learning allowed to develop a new algorithm for Bayesian deep learning on quantum computers \cite{zhao2019}. 
+The quantum models for convolutional neural networks, which may be suitable for the problems of learning of quantum states were also proposed \cite{cong2019, liu2019}. Quantum classification, tested on the MNIST dataset, via Slow Feature Analysis based on the use of Quantum Frobenius Distance was proposed \cite{kerenidis2018}. 
+Sublinear quantum algorithms for training linear and kernel-based classifiers were designed \cite{li2019}. 
+Furthermore, continuous-variable quantum neural networks \cite{killoran2019}, quantum autoencoders \cite{bondarenko2019}, quantum approaches for reinforcement learning \cite{dunjko2017, nautrup2019, foesel2018} and some other \cite{rebentrost2018, purushothaman1997, verdon2019, cherny2019, byrnes2013, mishra2019, vinci2019, lu2019} were developed. 
+Currently, it is believed that implementation of quantum neural networks can be the main test bed to achieve practical quantum supremacy on NISQ devices.
+
+In this paper, we realize a hybrid quantum assisted SOFM (QASOFM) and apply it to the data clustering problem in an unsupervised manner on a toy example of clustering paper abstracts.   
+We implement the quantum assisted SOFM in such a way that it becomes possible to use the Hamming distance as a distance metric for the training and to reduce the number of distance calculations in the number of clusters. 
+We propose an optimized circuit for realizing the Hamming distance on a quantum machine. 
+We prepare a toy example of data for clustering paper abstracts and give a proof-of-concept realization of the quantum assisted SOFM on the IBM Q experience quantum computer \cite{ibmq} and compare it with the classical case.
+
+\begin{figure}
+	\label{fig:sofm_fitting}
+	\includegraphics[width=0.95\columnwidth]{sofm_fitting.png}
+	\caption{
+		Schematic illustration of the clustering problem considered in this paper.  
+		Blue dots represent clusters and red dots are data points. 
+		The training process moves clusters to fit the data points. 
+		Note that there are fewer clusters than data points which is the essence of dimensionality reduction and is what permits the model to generalize the data.
+	}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{The quantum assisted self-organizing feature map (SOFM)}
+\label{sec:qasofm}
+
+SOFM is one of the best-known unsupervised learning methods that is widely used in various areas of modern science. 
+It was first proposed by Kohonen as a self-organizing unsupervised learning algorithm which produces feature maps similar to those occurring in the brain \cite{solan2001}. 
+The SOFM algorithm operates with a set of input objects, each represented by a $N$-dimensional vector, as input and maps them onto nodes of a two-dimensional grid.
+
+The input dimensions are associated with features and nodes in the grid, called cluster vectors, are assigned the $N$-dimensional vectors; 
+the components of these vectors are usually called weights. 
+Initially weight components are chosen randomly. 
+We then can train our SOFM adjusting the components through the learning process which can be oversimplified into two basic procedures, 
+selecting a winning cluster vector and updating its weights (Fig.~\ref{fig:sofm_fitting}). 
+In more detail, they consist of four step process: 
+1) select an input vector randomly from the set of all input vectors; 
+2) find a cluster vector which is closest to the input vector; 
+3) adjust the weights of the winning node in such a way that it becomes even closer to the input vector; 
+4) repeat this process many iterations until it converges.
+
+
+After the winning cluster vector is selected, the weights of the vector are adjusted according to 
+%
+\begin{equation}
+    \label{eq:learning}
+    \vec w_{\mathrm{new}} =
+		\vec{w}_{\mathrm{old}} 
+        + \alpha\left(\vec{x} - \vec w_{\mathrm{old}}\right)  .
+\end{equation}
+%
+In simple words, this expression can be understood according to the following: 
+if a component of the input vector is greater than the corresponding weight, increase the weight by a small amount; 
+if the input component is smaller than the weight, decrease the
+weight by a small amount. 
+The larger the difference between the input component and the weight component, the larger increment (decrement). 
+Intuitively, this procedure can be geometrically interpreted as iteratively moving the cluster vectors in space one at a time in a way that ensures each move is following the current trends inferred from their distances to the input objects. 
+A visualisation of this process is provided on figure (Fig.~\ref{fig:sofm_fitting}).
+
+Usually the winning cluster vector is selected based on the Euclidean distance between an input vector and the cluster vectors. 
+In our approach, we use the Hamming distance instead of the Euclidean distance to select the winning cluster vector. 
+It allows us to use a simpler encoding of the classical information into the quantum state and use an effective procedure for the calculation of the Hamming distance on the quantum machine, 
+such as to reduce the number of calculations in number of cluster vectors in comparison to the classical case.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Optimized quantum scheme for Hamming distance calculation}
+\label{subsec:qcircuit}
+
+
+%%%%%
+\begin{figure}[t]
+	\label{fig:qcircuit}
+	\includegraphics[width=0.95\columnwidth]{qcircuit.png}
+	\caption{
+    	%add the caption with intuitive explanation of the circuit
+		A quantum circuit for the Hamming distance calculation algorithm between all samples and clusters at once. 
+		First, we apply Hadamard gates in order to get superposition of the sample and cluster registers. 
+		Second, we encoded information about pairwise different qubits in a quantum state of the sample register with applying the CNOT gates. 
+		Third, Hamming distance values are encoded in the amplitudes of superposition with the control phase rotation and Hadamard gates. 
+		Finally, a quantum state of the sample register returned to the initial basis for information retrieval.
+	} 
+\end{figure}
+%%%%%
+
+
+
+%%%%%
+\begin{figure}[t]
+	\label{fig:distance_matrix}
+	\includegraphics[width=0.95\columnwidth]{distance_matrix.png}
+	\caption{
+		The Hamming distance matrix between two data sets of binary vectors. 
+		Values of distance that less than median distance value was marked black. 
+		The classical simulation of the quantum circuit shows perfect agreement to theoretical calculations and presented on the left figure. 
+		Result obtained on  IBMQ "ibmq\_16\_melbourne" backend is shown on the right figure. 
+		We can see good agreement between the distance matrices calculated classically and on the IBM Q Experience.
+	} 
+\end{figure}
+%%%%%
+
+
+
+
+We now introduce an optimized algorithm for calculating the matrix of Hamming distances \cite{trugenberger2001} between a sample vector and all cluster vectors at once.  
+This allows for a simple encoding of the classical information into a quantum register. 
+Initially we have two registers each with $n$ qubits in that we encode our set of binary vectors defined as
+%
+\begin{align}
+    \label{eq:encodnig}
+    \left| X \right\rangle  & = \sum\limits_{i=1}^{k} \left| x_i \right\rangle,  \\
+    \left| Y \right\rangle&  = \sum\limits_{i=1}^{l} \left| y_i \right\rangle,
+\end{align}
+% 
+where $ 1 \le k, l \le n $.  
+Here the registers $\left| X \right\rangle$ and $\left| Y \right\rangle$ correspond to the input states and the cluster states respectively. 
+The initial state of whole circuit is
+%
+\begin{equation} 
+\left| \psi_0 \right\rangle = 
+    \left| X \right\rangle
+    \left| Y \right\rangle 
+    \left| a \right\rangle
+    \label{eq:initial_state}
+\end{equation}
+%
+where $\left| a \right\rangle$ is an auxiliary qubit in the state $\left| 0 \right\rangle$ initially.
+
+We then apply a CNOT gate between $\left| X \right\rangle$ and $\left| Y \right\rangle$
+
+\begin{equation}
+    \left| \psi_1 \right\rangle = 
+    \mathrm{CNOT(Y,X)\left| \psi_0 \right\rangle} =  
+    \sum\limits_{i, j}^{k} 
+    \left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
+    \left| y^1_j, \dots, y^n_j \right\rangle
+    \left| 0 \right\rangle 
+\end{equation}
+where $d^\alpha_{ij} = \mathrm{CNOT}(y^\alpha_i, x^\alpha_j),\, \alpha = 1 \dots n$ and $i,j$ are the qubit indexes in the registers.
+
+In the result, we encoded information about pairwise different qubits in $\{X\}$ and $\{Y\}$ into register $\left| X \right\rangle$. 
+
+
+After that we transfer information about distance between sample state and cluster state into the amplitude of the superposed state. 
+In order to make that we apply Hadamard gate on auxiliary qubit, then control phase gate on $\left| Xa \right\rangle$,  
+
+\begin{equation}
+    \label{eq:control_phase_rotation}
+    R(\phi) = 
+    \begin{pmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & e^{-i\phi}
+    \end{pmatrix},
+    \quad \phi = \frac{\pi}{n}
+\end{equation}
+and again Hadamard gate.
+
+
+After the first Hadamard on the ancillary qubit we have the following state
+
+\begin{equation}
+    \left| \psi_2 \right\rangle = H_a\left| \psi_1 \right\rangle = 
+    \sum\limits_{i, j}^{k} 
+    \left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
+    \left| y^1_j, \dots, y^n_j \right\rangle
+    \dfrac{\left| 0 \right\rangle + \left| 1 \right\rangle}{\sqrt{2}}
+\end{equation}
+
+Then we apply the control phase gate
+
+\begin{multline}
+    \left| \psi_3 \right\rangle = R_{(X,a)}\left(\dfrac{\pi}{n}\right)\left| \psi_2 \right\rangle
+    \\ = \dfrac{1}{\sqrt{2}}
+				\sum\limits_{i, j}^{k} 
+				\left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
+        \left| y^1_j, \dots, y^n_j \right\rangle 
+        \left| 0 \right\rangle
+        \\ + \dfrac{1}{\sqrt{2}}
+				\sum\limits_{i, j}^{k}
+        \exp\left(\dfrac{-i \pi}{n}\sum\limits_l^n d^l_{ij} \right)
+        \left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
+        \left| y^1_j, \dots, y^n_j \right\rangle 
+        \left| 1 \right\rangle
+\end{multline}
+
+
+%\\ = \dfrac{1}{\sqrt{2}}
+%    \sum\limits_{i, j}^{k}
+%    \left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
+%        \left| y^1_j, \dots, y^n_j \right\rangle 
+%        \left| 0 \right\rangle
+%        \\ + \dfrac{1}{\sqrt{2}}
+%				\sum\limits_{i, j}^{k}
+%        \left| R(d^1_{ij}, 1)\left(\dfrac{\pi}{n}\right), \dots, R(d^n_{ij}, 1)\left(\dfrac{\pi}{n}\right) \right\rangle 
+%        \left| y^1_j, \dots, y^n_j \right\rangle 
+%        \left| 1 \right\rangle 
+
+
+Applying another Hadamard on ancillary qubit and doing necessary calculations the state of quantum register reads
+
+\begin{multline}
+    \left| \psi_4 \right\rangle = 
+    \sum\limits_{i, j}^{k} 
+    e^{\left(\dfrac{-i \pi}{2n}\sum\limits_l^n d^l_{ij} \right)}
+		\\ \times
+        \left\{\cos\left(\dfrac{\pi}{2n}\sum\limits_l^n d^l_{ij} \right)
+        \left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
+        \left| y^1_j, \dots, y^n_j \right\rangle 
+        \left| 0 \right\rangle\right.
+        \\+ 
+        \left. i \sin\left(\dfrac{\pi}{2n}\sum\limits_l^n d^l_{ij} \right)
+        \left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
+        \left| y^1_j, \dots, y^n_j \right\rangle 
+        \left| 1 \right\rangle\right\}
+\end{multline}
+
+
+Then we return to our initial basis for register $\left| X \right\rangle$ with applying the pairwise CNOT gates: 
+
+\begin{multline}
+    \left| \psi_5 \right\rangle = 
+    \mathrm{CNOT(Y,X)\left| \psi_4 \right\rangle} \\=  
+    \sum\limits_{i, j}^{k} 
+    e^{\left(\dfrac{-i \pi}{2n}\sum\limits_l^n d^l_{ij} \right)}
+				\left\{\cos\left(\dfrac{\pi}{2n}\sum\limits_l^n d^l_{ij} \right)
+        \left| X_i \right\rangle 
+        \left| Y_j \right\rangle 
+        \left| 0 \right\rangle\right.
+        \\+
+        \left. i \sin\left(\dfrac{\pi}{2n}\sum\limits_l^n d^l_{ij} \right)
+        \left| X_i \right\rangle 
+        \left| Y_j \right\rangle 
+        \left| 1 \right\rangle\right\}
+\end{multline}
+
+In the result we have the Hamming distances encoded into the amplitudes of the final state. 
+After getting statistics of the measurement outcomes we can produce the distance matrix between two data sets of binary vectors (Fig.~\ref{fig:distance_matrix}). 
+In this case, a biggest amplitude in measurement result coincide to a smallest Hamming distance when the measurement result of the auxiliary qubit is 0 
+and we have the inverse relationship when measurement result on the auxiliary qubit is 1. 
+In order to reduce noise we average measurement results over different states of the auxiliary qubit as $a_0(x_i,y_j) + (1-a_1(x_i,y_j))$ 
+where $a_0(x_i,y_j)$ and $a_1(x_i,y_j)$ are amplitudes for the measurement results $\left| x_i \right\rangle\left| y_j \right\rangle \left| 0 \right\rangle_a$ and $\left| x_i \right\rangle\left| y_j \right\rangle \left| 0 \right\rangle_a$ respectively. 
+In comparison with the circuits for Hamming distance calculations proposed previously \cite{trugenberger2001}, 
+our method allows one to reduce number of gates in the circuit (at least in $2n$ one-qubit NOT gates, 
+depends on actual realization control phase gate in a quantum register on the hardware level), 
+reconstruct all distance matrix at once and can be implemented with high fidelity on current quantum devices.
+
+% Please , add comparison of complexities in number of gates for realization between our scheme and previously proposed schemes (one qubit and two qubit separately)  
+% ??
+
+ 
+%\begin{align}
+%\\
+%\end{align} 
+%
+
+%
+%\begin{equation}
+%\end{equation}
+%(a black region indicates if the word occurs in the abstract)
+
+%%%%%
+\begin{figure}[t]
+	\label{fig:vectorized_sample}
+	\includegraphics[width=0.95\columnwidth]{vectorized_sample.png}
+	\caption{
+		(a) Representation of the data set of abstracts with the bag-of-words model is shown. 
+		Each abstract is represented by a binary vector with 9 elements. 
+		The samples are sorted into groups (QML, MED, BIO), 3 papers for each tag.  
+		(b) The Hamming distance between each vectorized abstract is shown with a number in the matrix. 
+		The sets of abstracts are well separated.
+	} 
+\end{figure}
+%%%%%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Demonstration of QASOFM on the IBM Q Experience}
+
+We now show results for a proof-of-concept demonstration of the algorithm introduced in the previous section, on a 16-qubit quantum computer provided by IBM Q Experience.  
+We implement unsupervised data clustering for three sets of paper abstracts from three different fields: quantum physics \cite{qml0, qml1, qml2}, medicine \cite{med0, med1, med2} and biology \cite{bio0, bio1, bio2}. 
+Each set consists of three random papers that focus on one of following topics: ``Quantum Machine Learning'' (QML), ``Cancer'' (MED) and ``Gene Expression'' (BIO). 
+Abstracts were vectorized by the bag-of-words model in order to choose most defining words in each data set (see Fig.~\ref{fig:vectorized_sample}). 
+This model represents text as a multiset ``bag'' of its words taking into account only multiplicity of words. 
+Preparing the bag-of-words we excluded the words that appear only in one abstract and more than in 4 abstracts and we also excluded the word ``level'' from consideration due to the frequent overlap between the clusters because it gives instabilities for both classical and quantum algorithms. 
+We restricted our bag-of-word size to 9 of the most frequent words from the full ``bags-of-word''  due to limitations of the number of qubits. 
+After vectorizing and pre-processing  the data, the clusters are well separated with the Hamming distance.  
+We observe that distances between the abstracts inside clusters are smaller than distances between the abstracts from different clusters, showing a successful self-organization (Fig.~\ref{fig:vectorized_sample}). 
+
+
+Classical SOFM \cite{kohonen1990}, as it has been explained earlier, can be oversimplified into two basic procedures: distance calculation between a one sample vector and all cluster vectors and shifting the closest cluster vector to the sample vector. 
+In classical SOFM, the complexity of algorithm in the sense of number of distance calculations scales as $O(LMN)$, where $N$ is number of samples, $M$ is number of randomly sampled cluster vectors, and $L$ is number of the shifts of cluster vectors.  
+In the QASOFM (Sec. \ref{sec:qasofm}), distance calculations are realized on a quantum device (i.e. the IBM Q Experience) with the use of circuit presented in Fig. \ref{fig:qcircuit}. 
+This approach allows one to reduce the number of operations in a number of cluster states with an optimized number of gates that are possible to realize on currently available quantum computing devices with a limited number of qubits. 
+The circuit realized in such a manner that calculation of Hamming distance between the sample vector and all cluster vectors is realized in one operation. 
+The complexity of the quantum assisted SOFM then scales as $O(LN)$. 
+
+In order to check that our algorithm gives the correct results we compare it to classical calculations of the distance matrix on two data sets of binary vectors, as shown in Fig. \ref{fig:distance_matrix}.  
+We see good agreement between the distance matrices calculated classically and on the IBM Q Experience. 
+The theoretical calculations and classical simulations show perfect agreement with each other. 
+An example of the QASOFM learning process is given on Fig.~\ref{fig:convergence}. 
+Initially, the cluster vectors were randomly chosen (see Fig.~\ref{fig:convergence}) and label of sample distribution is shown for the zeroth epoch in Fig.~\ref{fig:convergence}(a). 
+In order to prepare a superposition of cluster vectors needed for the calculation of the distance matrix at once we use the standard initialization of QISKIT library. 
+Each epoch of the algorithm requires 9 distance calculations in the  quantum implementation (number of samples in general case) or 27 distance calculations for classical realization (product of number of samples and number of cluster vectors in general case). 
+In order to realize the circuit for the distance calculation for the quantum case we used the IBM Q machine. 
+After the distance calculation from each sample to all cluster vectors at each epoch we label each sample with the index of the closest cluster vector and shift the closest cluster vectors to the sample one. 
+The shift is made by the change of the first binary element in the cluster vectors different from the sample one. 
+The evolution of the labels presented on Fig. ~\ref{fig:convergence}(c).  
+Good convergence is already observed in the fourth epoch.
+
+
+%%%%%
+\begin{figure}[t]
+	\label{fig:convergence}
+	\includegraphics[width=0.95\columnwidth]{convergence.png}
+	\caption{
+		(a) Initial random binary vectors of clusters are presented. We randomly sampled 3 binary vectors of size 9 as initial cluster vectors (labeled by 0,1,2) and it is shown how the words from the bag of words model presented in them. 
+		(b) The result of applying our QASOFM implemented on the IBMQ "ibmq\_16\_melbourne" backend is shown on the bottom left figure. 
+		Vectors mean cluster elements for BIO, MED, QML groups, respectively (up to down). 
+		(c) The evolution of label distribution on each learning epoch is presented on the right figure. 
+		Good convergence already is observed on the fourth epoch.
+	} 
+\end{figure}
+%%%%%
+
+
+
+\section{Discussions}
+We have developed a quantum assisted SOFM and showed a proof-of-concept demonstration that it can be used to solve clustering problems in an unsupervised manner with potential to outperform classical counterpart in real life tasks. 
+The procedure of solving such clustering problem requires calculating the distance many times in iterative way. 
+We introduced an optimized circuit for Hamming distance calculations that can be implemented on currently available quantum computing devices with high fidelity. 
+Our circuit could act as a distance-computing component of a classical SOFMs algorithm and in this way improve its performance. 
+Due to wide use of classical SOFMs in different areas of modern research this can give opportunities for the use of QASOFM in practical applications in near term.
+
+
+
+
+\section*{Acknowledgments}
+The work is supported by the RFBR-NSFC collaborative program (Grant No. 18-57-53007) and the State assignment (N. 0089-2019-0002). I.D.L. acknowledges support from the Russian Foundation for Basic Research, grant No.19-32-80004 and support from the Foundation for the Advancement of Theoretical Physics and Mathematics “BASIS” No.19-1-5-130-1. T.B. is supported by the Shanghai Research Challenge Fund; New York University Global Seed Grants for Collaborative Research; National Natural Science Foundation of China (61571301, D1210036A); the NSFC Research Fund for International Young Scientists (11650110425, 11850410426); NYU-ECNU Institute of Physics at NYU Shanghai; the Science and Technology Commission of Shanghai Municipality (17ZR1443600); the China Science and Technology Exchange Center (NGA-16-001); and the NSFC-RFBR Collaborative grant (81811530112).
+
+
+
+
+
+%\section*{Author Contributions}
+
+%I.D.L. and A.N.P. performed the calculations. All authors discussed the results and wrote the paper. 
+
+
+
+
+
+\section*{Conflict of interest}
+
+The authors declare no conflict of interest.
+
+
+\section*{Keywords}
+quantum self-organizing feature map; 
+quantum machine learning; 
+neural network; 
+quantum unsupervised data clustering; 
+Hamming distance.
+
+\bibliographystyle{unsrt}
+\bibliography{bibliography}
+
+%\begin{thebibliography}{99}
+%\end{thebibliography}
+\end{document}
