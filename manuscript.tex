@@ -201,19 +201,22 @@ such as to reduce the number of calculations in number of cluster vectors in com
 
 
 
-We now introduce an optimized algorithm for calculating the matrix of Hamming distances \cite{trugenberger2001} between a sample vector and all cluster vectors at once.  
-This allows for a simple encoding of the classical information into a quantum register. 
-Initially we have two registers each with $n$ qubits in that we encode our set of binary vectors defined as
+We now introduce an optimized algorithm for calculating the matrix of Hamming distances \cite{trugenberger2001} between a sample vector and all cluster vectors at once.  This allows for a simple encoding of the classical information into a quantum register.
+
+The overall procedure involves two registers of $n$ qubits each, denoted $\left| X \right\rangle$ and $\left| Y \right\rangle$, along with a single auxiliary qubit $\left| a \right\rangle$. During entire processing, the $\left| Y \right\rangle$ is used to store the cluster states, then at the beginning and at the end of the processing the $\left| X \right\rangle$ register stores the input vectors, while during the processing it stores the differences between input vectors and cluster states.
+
+Now for this demonstration let us assume we have $k$ input vectors and $l$ cluster states. The $i$th input vector and $j$th cluster vector are respectively denoted as $\left| x_i \right\rangle$ and $\left| y_j \right\rangle$.
+
+The registers $\left| X \right\rangle$ and $\left| Y \right\rangle$ will properly store input vectors and cluster vectors if initialized as follows.
+
 %
 \begin{align}
+    \left| X \right\rangle  & = \frac{1}{\sqrt{k}} \sum\limits_{i=1}^{k} \left| x_i \right\rangle,  \\
+    \left| Y \right\rangle&  = \frac{1}{\sqrt{l}} \sum\limits_{j=1}^{l} \left| y_j \right\rangle,
     \label{eq:encodnig}
-    \left| X \right\rangle  & = \sum\limits_{i=1}^{k} \left| x_i \right\rangle,  \\
-    \left| Y \right\rangle&  = \sum\limits_{i=1}^{l} \left| y_i \right\rangle,
 \end{align}
 % 
-where $ 1 \le k, l \le n $.  
-Here the registers $\left| X \right\rangle$ and $\left| Y \right\rangle$ correspond to the input states and the cluster states respectively. 
-The initial state of whole circuit is
+Both registers along with the auxiliary qubit compose into initial state of the entire circuit in a form denoted below. 
 %
 \begin{equation} 
 \left| \psi_0 \right\rangle = 
@@ -225,23 +228,22 @@ The initial state of whole circuit is
 %
 where $\left| a \right\rangle$ is an auxiliary qubit in the state $\left| 0 \right\rangle$ initially.
 
-We then apply a CNOT gate between $\left| X \right\rangle$ and $\left| Y \right\rangle$
+Given this initial state we may begin the processing of the problem. We start by applying a CNOT gate between $\left| X \right\rangle$ and $\left| Y \right\rangle$
 
 \begin{equation}
     \left| \psi_1 \right\rangle = 
     \mathrm{CNOT(Y,X)\left| \psi_0 \right\rangle} =  
-    \sum\limits_{i, j}^{k} 
+    \frac{1}{\sqrt{kl}} \sum\limits_{i, j}^{k} 
     \left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
     \left| y^1_j, \dots, y^n_j \right\rangle
     \left| 0 \right\rangle 
 \end{equation}
 where $d^\alpha_{ij} = \mathrm{CNOT}(y^\alpha_i, x^\alpha_j),\, \alpha = 1 \dots n$ and $i,j$ are the qubit indexes in the registers.
 
-In the result, we encoded information about pairwise different qubits in $\{X\}$ and $\{Y\}$ into register $\left| X \right\rangle$. 
+In the result, at this stage of the computation the $\left| X \right\rangle$ no longer stores the input vectors, instead it stores the information about pairwise different qubits between the input vector $\{X\}$ and cluster vector $\{Y\}$. 
 
 
-After that we transfer information about distance between sample state and cluster state into the amplitude of the superposed state. 
-In order to make that we apply Hadamard gate on auxiliary qubit, then control phase gate on $\left| Xa \right\rangle$,  
+The next stage, for each pair $\{X\}$ and $\{Y\}$, an accumulated information of all the differences is projected into the amplitude of the superposed state. this is achieved by applying the Hadamard gate on auxiliary qubit, then control phase gate on $\left| Xa \right\rangle$,  
 
 \begin{equation}
     \label{eq:control_phase_rotation}
@@ -261,7 +263,7 @@ After the first Hadamard on the ancillary qubit we have the following state
 
 \begin{equation}
     \left| \psi_2 \right\rangle = H_a\left| \psi_1 \right\rangle = 
-    \sum\limits_{i, j}^{k} 
+    \frac{1}{\sqrt{kl}} \sum\limits_{i, j}^{k} 
     \left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
     \left| y^1_j, \dots, y^n_j \right\rangle
     \dfrac{\left| 0 \right\rangle + \left| 1 \right\rangle}{\sqrt{2}}
@@ -271,12 +273,12 @@ Then we apply the control phase gate
 
 \begin{multline}
     \left| \psi_3 \right\rangle = R_{(X,a)}\left(\dfrac{\pi}{n}\right)\left| \psi_2 \right\rangle
-    \\ = \dfrac{1}{\sqrt{2}}
+    \\ = \dfrac{1}{\sqrt{2kl}}
 				\sum\limits_{i, j}^{k} 
 				\left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
         \left| y^1_j, \dots, y^n_j \right\rangle 
         \left| 0 \right\rangle
-        \\ + \dfrac{1}{\sqrt{2}}
+        \\ + \dfrac{1}{\sqrt{2kl}}
 				\sum\limits_{i, j}^{k}
         \exp\left(\dfrac{-i \pi}{n}\sum\limits_l^n d^l_{ij} \right)
         \left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
@@ -301,7 +303,7 @@ Applying another Hadamard on ancillary qubit and doing necessary calculations th
 
 \begin{multline}
     \left| \psi_4 \right\rangle = 
-    \sum\limits_{i, j}^{k} 
+    \frac{1}{\sqrt{kl}} \sum\limits_{i, j}^{k} 
     e^{\left(\dfrac{-i \pi}{2n}\sum\limits_l^n d^l_{ij} \right)}
 		\\ \times
         \left\{\cos\left(\dfrac{\pi}{2n}\sum\limits_l^n d^l_{ij} \right)
@@ -316,12 +318,14 @@ Applying another Hadamard on ancillary qubit and doing necessary calculations th
 \end{multline}
 
 
-Then we return to our initial basis for register $\left| X \right\rangle$ with applying the pairwise CNOT gates: 
+This completed the stage of projecting the differences between pairs of $\{X\}$ and $\{Y\}$ onto the amplitude of the auxiliary qubit. The process is done in the $x$-basis, which explains the surrounding Hadamard gates. There are two possible measurement outcomes of the auxiliary qubit, each pair of $\{X\}$ and $\{Y\}$ forms a subspace of the Hilbert space, the controlled phase gate ensures to change amplitudes of those outcomes within this subspace depending on how different the spin configurations between $\{X\}$ and $\{Y\}$ are.
+
+At this stage, the information of differences between pairs of $\{X\}$ and $\{Y\}$ is no longer relevant, thus we return to our initial basis for register $\left| X \right\rangle$ by applying the pairwise CNOT gates:
 
 \begin{multline}
-    \left| \psi_5 \right\rangle = 
+    \left| \psi_f \right\rangle = 
     \mathrm{CNOT(Y,X)\left| \psi_4 \right\rangle} \\=  
-    \sum\limits_{i, j}^{k} 
+    \frac{1}{\sqrt{kl}}\sum\limits_{i, j}^{k} 
     e^{\left(\dfrac{-i \pi}{2n}\sum\limits_l^n d^l_{ij} \right)}
 				\left\{\cos\left(\dfrac{\pi}{2n}\sum\limits_l^n d^l_{ij} \right)
         \left| X_i \right\rangle 
@@ -334,16 +338,38 @@ Then we return to our initial basis for register $\left| X \right\rangle$ with a
         \left| 1 \right\rangle\right\}
 \end{multline}
 
-In the result we have the Hamming distances encoded into the amplitudes of the final state. 
-After getting statistics of the measurement outcomes we can produce the distance matrix between two data sets of binary vectors (Fig.~\ref{fig:distance_matrix}). 
-In this case, a biggest amplitude in measurement result coincide to a smallest Hamming distance when the measurement result of the auxiliary qubit is 0 
-and we have the inverse relationship when measurement result on the auxiliary qubit is 1. 
-In order to reduce noise we average measurement results over different states of the auxiliary qubit as $a_0(x_i,y_j) + (1-a_1(x_i,y_j))$ 
-where $a_0(x_i,y_j)$ and $a_1(x_i,y_j)$ are amplitudes for the measurement results $\left| x_i \right\rangle\left| y_j \right\rangle \left| 0 \right\rangle_a$ and $\left| x_i \right\rangle\left| y_j \right\rangle \left| 0 \right\rangle_a$ respectively. 
-In comparison with the circuits for Hamming distance calculations proposed previously \cite{trugenberger2001}, 
-our method allows one to reduce number of gates in the circuit (at least in $2n$ one-qubit NOT gates, 
-depends on actual realization control phase gate in a quantum register on the hardware level), 
-reconstruct all distance matrix at once and can be implemented with high fidelity on current quantum devices.
+This made $\{X\}$ store input vectors again, just like at the initial stage, however it preserved the amplitudes of the auxiliary qubit which are proportional to how different each pairs of $\{X\}$ and $\{Y\}$ are.
+
+In the result we have the Hamming distances encoded into the amplitudes of the final state. After getting statistics of the measurement outcomes we can produce the distance matrix between two data sets of binary vectors (Fig.~\ref{fig:distance_matrix}). In this case, a biggest amplitude in measurement result coincide to a smallest Hamming distance when the measurement result of the auxiliary qubit is 0 and we have the inverse relationship when measurement result on the auxiliary qubit is 1.
+
+Measuring the Hamming distance of a particular pair of input vector $\left| X_i \right\rangle$ and cluster vector $\left| Y_j \right\rangle$ consists of extracting the relevant amplitude from the subspace that those states form, this can be done using the following projector operator.
+
+\begin{align}
+\Pi_{i,j} = &\left| X_i \rangle\langle X_i \right| \otimes \left| X_i \rangle\langle Y_j \right| \otimes I \nonumber \\ 
+\end{align} 
+
+Using the above projection operator, the subspace of the Hilbert space formed by particular pair of input vector and cluster vector can be traced out as follows.
+
+\begin{align}
+    \rho_{i,j} &= \text{Tr}_{1,\dots,2n} (\Pi_{i,j} \left| \psi_f \rangle\langle \psi_f \right| \Pi_{i,j})
+\end{align}
+
+Now the following two relevant amplitudes for the measurement results can be extracted.
+
+\begin{align}
+    a_0(x_i,y_j) & = \frac{\left\langle 0 |\rho_{i,j}| 0 \right\rangle}{\text{tr}(\rho_{i,j})},  \\
+    a_1(x_i,y_j) & = \frac{\left\langle 1 |\rho_{i,j}| 1 \right\rangle}{\text{tr}(\rho_{i,j})},
+\end{align}
+
+In order to reduce noise we average measurement results over different states of the auxiliary qubit, thus the measured Hamming distance between the input vector $\left| X_i \right\rangle$ and cluster vector $\left| Y_j \right\rangle$ takes the following form.
+
+\begin{align}
+    d_{i,j}^H & \propto 1 - \frac{1}{2}(a_0(x_i,y_j) + (1-a_1(x_i,y_j)))
+\end{align}
+
+The Hamming distance measured in this way is contained $0 \leq d_{i,j}^H \leq 1$, where intuitively, $0$ would indicate $x_i$ are $y_j$ identical and $1$ would mean they are completely opposite in terms of their pairwise binary coordinates.
+
+In comparison with the circuits for Hamming distance calculations proposed previously \cite{trugenberger2001}, our method allows one to reduce number of gates in the circuit (at least in $2n$ one-qubit NOT gates, depends on actual realization control phase gate in a quantum register on the hardware level), reconstruct all distance matrix at once and can be implemented with high fidelity on current quantum devices.
 
 % Please , add comparison of complexities in number of gates for realization between our scheme and previously proposed schemes (one qubit and two qubit separately)  
 % ??
