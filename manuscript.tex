@@ -263,7 +263,7 @@ After the first Hadamard on the ancillary qubit we have the following state
 
 \begin{equation}
     \left| \psi_2 \right\rangle = H_a\left| \psi_1 \right\rangle = 
-    \sum\limits_{i, j}^{k} 
+    \frac{1}{\sqrt{kl}} \sum\limits_{i, j}^{k} 
     \left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
     \left| y^1_j, \dots, y^n_j \right\rangle
     \dfrac{\left| 0 \right\rangle + \left| 1 \right\rangle}{\sqrt{2}}
@@ -273,12 +273,12 @@ Then we apply the control phase gate
 
 \begin{multline}
     \left| \psi_3 \right\rangle = R_{(X,a)}\left(\dfrac{\pi}{n}\right)\left| \psi_2 \right\rangle
-    \\ = \dfrac{1}{\sqrt{2}}
+    \\ = \dfrac{1}{\sqrt{2kl}}
 				\sum\limits_{i, j}^{k} 
 				\left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
         \left| y^1_j, \dots, y^n_j \right\rangle 
         \left| 0 \right\rangle
-        \\ + \dfrac{1}{\sqrt{2}}
+        \\ + \dfrac{1}{\sqrt{2kl}}
 				\sum\limits_{i, j}^{k}
         \exp\left(\dfrac{-i \pi}{n}\sum\limits_l^n d^l_{ij} \right)
         \left| d^1_{ij}, \dots, d^n_{ij} \right\rangle 
@@ -303,7 +303,7 @@ Applying another Hadamard on ancillary qubit and doing necessary calculations th
 
 \begin{multline}
     \left| \psi_4 \right\rangle = 
-    \sum\limits_{i, j}^{k} 
+    \frac{1}{\sqrt{kl}} \sum\limits_{i, j}^{k} 
     e^{\left(\dfrac{-i \pi}{2n}\sum\limits_l^n d^l_{ij} \right)}
 		\\ \times
         \left\{\cos\left(\dfrac{\pi}{2n}\sum\limits_l^n d^l_{ij} \right)
@@ -325,7 +325,7 @@ At this stage, the information of differences between pairs of $\{X\}$ and $\{Y\
 \begin{multline}
     \left| \psi_f \right\rangle = 
     \mathrm{CNOT(Y,X)\left| \psi_4 \right\rangle} \\=  
-    \sum\limits_{i, j}^{k} 
+    \frac{1}{\sqrt{kl}}\sum\limits_{i, j}^{k} 
     e^{\left(\dfrac{-i \pi}{2n}\sum\limits_l^n d^l_{ij} \right)}
 				\left\{\cos\left(\dfrac{\pi}{2n}\sum\limits_l^n d^l_{ij} \right)
         \left| X_i \right\rangle 
