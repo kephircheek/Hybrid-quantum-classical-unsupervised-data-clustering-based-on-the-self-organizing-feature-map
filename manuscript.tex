@@ -218,7 +218,7 @@ After the first Hadamard on the ancilla qubit the state is
 %
 \begin{equation}
     \left| \psi_2 \right\rangle = H_a\left| \psi_1 \right\rangle = 
-    \sum\limits_{i, j=1}^{k} 
+    \frac{1}{\sqrt{kl}}\sum\limits_{i, j=1}^{k} 
     \left| d^{(1)}_{ij}, \dots, d^{(n)}_{ij} \right\rangle 
     \left| y^{(1)}_j, \dots, y^{(n)}_j \right\rangle
     \dfrac{(\left| 0 \right\rangle + \left| 1 \right\rangle)}{\sqrt{2}}  .
@@ -228,12 +228,12 @@ Applying the controlled phase gate the state then becomes [TB: please define all
 %
 \begin{multline}
     \left| \psi_3 \right\rangle = R_{(X,a)}\left(\dfrac{\pi}{n}\right)\left| \psi_2 \right\rangle
-    \\ = \dfrac{1}{\sqrt{2}}
+    \\ = \dfrac{1}{\sqrt{2kl}}
 				\sum\limits_{i, j=1}^{k} 
 				\left| d^{(1)}_{ij}, \dots, d^{(n)}_{ij} \right\rangle 
         \left| y^{(1)}_j, \dots, y^{(n)}_j \right\rangle 
         \left| 0 \right\rangle
-        \\ + \dfrac{1}{\sqrt{2}}
+        \\ + \dfrac{1}{\sqrt{2kl}}
 				\sum\limits_{i, j=1}^{k}
         \exp\left(\dfrac{-i \pi}{n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
         \left| d^{(1)}_{ij}, \dots, d^{(n)}_{ij} \right\rangle 
@@ -242,7 +242,7 @@ Applying the controlled phase gate the state then becomes [TB: please define all
 \end{multline}
 %
 %
-%\\ = \dfrac{1}{\sqrt{2}}
+%\\ = \dfrac{1}{\sqrt{2kl}}
 %    \sum\limits_{i, j}^{k}
 %    \left| d^{(1)}_{ij}, \dots, d^{(n)}_{ij} \right\rangle 
 %        \left| y^{(1)}_j, \dots, y^{(n)}_j \right\rangle 
@@ -257,7 +257,7 @@ Applying another Hadamard on the ancilla qubit we obtain
 %
 \begin{multline}
     \left| \psi_4 \right\rangle = 
-    \sum\limits_{i, j=1}^{k} 
+    \frac{1}{\sqrt{kl}}\sum\limits_{i, j=1}^{k} 
     \exp \left(\dfrac{-i \pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
 		\\ \times
         \left[ \cos\left(\dfrac{\pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
@@ -278,7 +278,7 @@ At this stage, the information regarding the differences between pairs of $\{X\}
 \begin{multline}
     \left| \psi_f \right\rangle = 
     \mathrm{CNOT} (Y,X)\left| \psi_4 \right\rangle \\=  
-    \sum\limits_{i, j=1}^{k} 
+    \frac{1}{\sqrt{kl}}\sum\limits_{i, j=1}^{k} 
     \exp \left(\dfrac{-i \pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
 				\left[ \cos\left(\dfrac{\pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
         \left| X_i \right\rangle 
