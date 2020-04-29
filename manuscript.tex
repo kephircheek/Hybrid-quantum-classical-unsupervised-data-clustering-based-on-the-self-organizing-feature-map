@@ -44,8 +44,7 @@
 
 \begin{abstract}
 	Unsupervised machine learning is one of the main techniques in artificial intelligence. 
-	Quantum computers offer opportunities to speed up such machine learning techniques, 
-	where the number of input data elements is extremely large. 
+	Quantum computers offer opportunities to speed up such machine learning techniques. 
 	Here, we propose a realization of quantum assisted unsupervised data clustering using the self-organizing feature map artificial neural networks. 
 	We make a proof-of-concept realization of one of the central components of the approach on the IBM Q Experience 
 	and show that it allows us to reduce number of calculations in a number of clusters. 
@@ -77,7 +76,7 @@ Once it is trained, the map can classify a vector from the input space by findin
 Meanwhile, there has been much interest recently in applying quantum computing techniques to machine learning \cite{dunjko2018, biamonte2017, schuld2014, carleo2019}. 
 The main focus of early works in quantum machine learning (QML) was on the use of quantum computers to perform basic linear algebra subroutines with a quantum speedup (such as Fourier transform and solving systems of linear equations \cite{wiebe2012,harrow2009,childs2017}) by utilizing quantum phenomena such as quantum entanglement and quantum superposition \cite{biamonte2017, schuld2014}.  
 Quantum versions were developed for linear regression, principal component analysis, support vector machine, K-means algorithm and others \cite{lloyd2013,lloyd2014,dunjko2016,paparo2014,rebentrost2014}. 
-More recently, there has been attention on developing quantum neural networks \cite{kamruzzaman2019, schuld2014b, jeswal2019}. 
+More recently, there has been attention on developing quantum neural networks \cite{kamruzzaman2019, schuld2014b, jeswal2019, broughton2020}. 
 The interest in quantum neural networks was inspired by progress in experimental quantum computing when it became possible to use parametrized quantum circuits, 
 where the parameters behave much like the weights of a neural network \cite{lewenstein1994}. 
 In particular, quantum algorithms for training and evaluating feedforward neural networks was developed, 
@@ -89,8 +88,14 @@ Sublinear quantum algorithms for training linear and kernel-based classifiers we
 Furthermore, continuous-variable quantum neural networks \cite{killoran2019}, 
 quantum autoencoders \cite{bondarenko2019}, 
 quantum approaches for reinforcement learning \cite{dunjko2017, nautrup2019, foesel2018} 
-and some other \cite{rebentrost2018, purushothaman1997, verdon2019, cherny2019, byrnes2013, mishra2019, vinci2019, lu2019} were developed. 
-Currently, it is believed that implementation of quantum neural networks can be the main test bed to achieve practical quantum supremacy on noisy intermediate scale quantum (NISQ) devices.
+and some other \cite{rebentrost2018, purushothaman1997, verdon2019, cherny2019, byrnes2013, mishra2019, pyrkov2019, vinci2019, lu2019} were developed. 
+At the same time, non-neural-network based hybrid quantum classical algorithms have become a new direction of significant interest \cite{mcclean2016,arute2020,akshay2020}. 
+Such hybrid algorithms involve as a part some quantum circuits for speed-up and usually trained in a standard classical learning loop. 
+In particular, the Quantum Approximate Optimization Algorithm was developed to find approximate solutions to combinatorial optimization problems \cite{farhi2014,farhi2016} 
+and designed to problems such as MAX-CUT, Grover’s search algorithm and so on \cite{arute2020,akshay2020,wang2018,jiang2017,huang2019,wecker2016,pagano2019}. 
+Another example of well-known hybrid quantum classical algorithms is Variational Quantum Eigensolver (VQE) for applications in quantum chemistry 
+\cite{kandala2017,aspuru-guzik2005,lanyon2010,peruzzo2014}.
+Currently, it is believed that implementation of quantum neural networks and hybrid quantum classical algorithms can be the main test bed to achieve practical quantum supremacy on noisy intermediate scale quantum (NISQ) devices.
 
 In this paper, we analyze  a hybrid quantum assisted SOFM (QASOFM) 
 and apply it to the data clustering problem in an unsupervised manner on a toy example of clustering paper abstracts.   
@@ -103,7 +108,6 @@ and give a proof-of-concept realization of the quantum assisted SOFM on the IBM 
 and compare it to the classical case.
 
 \begin{figure}
-	\label{fig:sofm_fitting}
   	\includegraphics[width=0.95\columnwidth]{sofm_fitting.png}
 	\caption{
 		Schematic illustration of the clustering problem considered in this paper.  
@@ -113,6 +117,7 @@ and compare it to the classical case.
 		which is the essence of dimensionality reduction, 
 		and is what permits the model to generalize the data.
 	}
+	\label{fig:sofm_fitting}
 \end{figure}
 
 
@@ -140,7 +145,7 @@ and compare it to the classical case.
 
 
 
-\section{The quantum assisted self-organizing feature map (SOFM)}
+\section{The quantum assisted self-organizing feature map (QASOFM)}
 \label{sec:qasofm}
 
 
@@ -150,7 +155,8 @@ and compare it to the classical case.
 
 The SOFM is one of the most widely-used unsupervised learning methods used in various areas of modern science. 
 It was first proposed by Kohonen as a self-organizing unsupervised learning algorithm which produces feature maps similar to those occurring in the brain \cite{solan2001}. 
-The SOFM algorithm operates with a set of input objects, each represented by a $N$-dimensional vector, and maps them onto nodes of a two-dimensional grid.
+The SOFM algorithm operates with a set of input objects, each represented by a $N$-dimensional vector, 
+and describes a mapping from a higher-dimensional input space to a lower-dimensional map space.
 
 The input dimensions are associated with the features, 
 and the nodes in the grid (called cluster vectors) are assigned the $N$-dimensional vectors. 
@@ -166,17 +172,17 @@ More specifically, they consist of four step process: \begin{enumerate*}
 
 
 After the winning cluster vector is selected, the weights of the vector are adjusted according to
-
+%
 \begin{equation}
+	\vec w_{i+1} =
+		\vec w_i
+		+ \alpha\left(\vec{x} - \vec w_i\right).
     \label{eq:learning}
-    \vec w_{\mathrm{new}} =
-    	\vec w_{\mathrm{old}} 
-        + \alpha\left(\vec{x} - \vec w_{\mathrm{old}}\right)  
 \end{equation}
-
+%
 The above expression can be interpreted according to: 
-if a component of the input vector is greater than the corresponding weight, 
-increase the weight by a small amount; 
+if a component of the input vector $\vec{x}$ is greater than the corresponding weight $ \vec{w}_i $, 
+increase the weight by a small amount with the learning rate $\alpha$; 
 if the input component is smaller than the weight, decrease the weight by a small amount. 
 The larger the difference between the input component and the weight component, the larger the increment (decrement). 
 Intuitively, this procedure can be geometrically interpreted as iteratively moving the cluster vectors in space one at a time in a way 
@@ -208,9 +214,8 @@ such as to reduce the number of calculations in number of cluster vectors in com
 
 
 %%%%%
-\begin{figure}[t]
-	\label{fig:qcircuit}
-	\includegraphics[width=0.95\columnwidth]{qcircuit.png}
+\begin{figure*}[t]
+	\includegraphics[width=1.9\columnwidth]{qcircuit.png}
 	\caption{
 		Quantum circuit for the quantum parallelized Hamming distance calculation between all samples and clusters. 
 		First,  Hadamard gates are applied in order to obtain a superposition of the sample and cluster registers. 
@@ -218,22 +223,23 @@ such as to reduce the number of calculations in number of cluster vectors in com
 		Third, Hamming distance values are encoded in the amplitudes of superposition with the control phase rotation and Hadamard gates. 
 		Finally, a quantum state of the sample register returned to the initial basis for information retrieval. 	
 	} 
-\end{figure}
+	\label{fig:qcircuit}
+\end{figure*}
 %%%%%
 
 
 
 %%%%%
 \begin{figure}[t]
-	\label{fig:distance_matrix}
 	\includegraphics[width=0.95\columnwidth]{distance_matrix.png}
 	\caption{
-		Hamming distance matrix between two data sets of binary vectors. 
+		(a) Hamming distance matrix between two data sets of binary vectors. 
 		Values of distance that are less than the median distance value are marked black. 
-		Classical simulation of the quantum circuit shows perfect agreement to theoretical calculations and presented on the left figure. 
-		Result obtained on the IBM Q Experience ``ibmq\_16\_melbourne'' backend is shown on the right figure. 
+		Classical simulation of the quantum circuit shows perfect agreement to theoretical calculations. 
+		(b) Result obtained on the IBM Q Experience ``ibmq\_16\_melbourne'' backend. 
 		We can see good agreement between the distance matrices calculated classically and on the IBM Q Experience.  
-		}
+	}
+	\label{fig:distance_matrix}
 \end{figure}
 %%%%%
 
@@ -241,7 +247,8 @@ such as to reduce the number of calculations in number of cluster vectors in com
 
 
 We now introduce an optimized algorithm for calculating the matrix of Hamming distances \cite{trugenberger2001} between a sample vector and all cluster vectors, making use of quantum parallelism.  
-This allows for a simple encoding of the classical information into a quantum register. 
+
+%This allows for a simple encoding of the classical information into a quantum register. 
 
 The overall procedure involves two registers of $n$ qubits each, denoted $\left| X \right\rangle$ and $\left| Y \right\rangle$, along with a single auxiliary qubit $\left| a \right\rangle$. 
 During the whole process, the $\left| Y \right\rangle$ register is used to store the cluster states.  
@@ -249,12 +256,12 @@ At the beginning and end of the procedure the $\left| X \right\rangle$ register 
 Meanwhile, during the procedure it stores the differences between input vectors and cluster states.
 
 Let us assume we have $k$ input vectors and $l$ cluster states. 
-The $i$th input vector and $j$th cluster vector are respectively denoted as $\left| x_i \right\rangle$, $\left| y_j \right\rangle$. 
+The $i$th input vector and $j$th cluster vector are respectively denoted as $\left| X_i \right\rangle$, $\left| Y_j \right\rangle$. 
 The registers $\left| X \right\rangle$ and $\left| Y \right\rangle$ are initialized to store the input vectors and cluster vectors according to
 %
 \begin{align}
-    \left| X \right\rangle  & = \frac{1}{\sqrt{k}} \sum\limits_{i=1}^{k} \left| x_i \right\rangle,  \\
-    \left| Y \right\rangle&  = \frac{1}{\sqrt{l}} \sum\limits_{j=1}^{l} \left| y_j \right\rangle .
+    \left| X \right\rangle  & = \frac{1}{\sqrt{k}} \sum\limits_{i=1}^{k} \left| X_i \right\rangle,  \\
+    \left| Y \right\rangle&  = \frac{1}{\sqrt{l}} \sum\limits_{j=1}^{l} \left| Y_j \right\rangle .
     \label{eq:encodnig}
 \end{align}
 % 
@@ -291,7 +298,7 @@ followed by a controlled phase gate on $\left| Xa \right\rangle$ defined as
 %
 \begin{equation}
     \label{eq:control_phase_rotation}
-    R(\phi) = 
+    R_{(X,a)}(\phi) = 
     \begin{pmatrix}
         1 & 0 & 0 & 0 \\
         0 & 1 & 0 & 0 \\
@@ -301,7 +308,7 @@ followed by a controlled phase gate on $\left| Xa \right\rangle$ defined as
     \quad \phi = \frac{\pi}{n}
 \end{equation}
 %
-Finally, another Hadamard gate is applied. 
+Finally, another Hadamard gate is applied on the ancilla qubit (see Fig. \ref{fig:qcircuit}). 
 
 After the first Hadamard on the ancilla qubit the state is
 %
@@ -313,7 +320,7 @@ After the first Hadamard on the ancilla qubit the state is
     \dfrac{(\left| 0 \right\rangle + \left| 1 \right\rangle)}{\sqrt{2}}  .
 \end{equation}
 %
-Applying the controlled phase gate the state then becomes: 
+Applying the controlled phase gate the state then becomes
 %
 \begin{multline}
     \left| \psi_3 \right\rangle = R_{(X,a)}\left(\dfrac{\pi}{n}\right)\left| \psi_2 \right\rangle
@@ -354,8 +361,7 @@ There are two possible measurement outcomes of the auxiliary qubit.
 Each pair of $\{X\}$ and $\{Y\}$ forms a subspace of the Hilbert space, 
 the controlled phase gate ensures to change amplitudes of those outcomes within this subspace depending on how different the spin configurations between $\{X\}$ and $\{Y\}$ are.
 
-At this stage, the information regarding the differences between pairs of $\{X\}$ and $\{Y\}$ is no longer relevant, 
-thus we return to our initial basis for register $\left| X \right\rangle$ by applying pairwise CNOT gates:
+At this stage, the information regarding the differences between pairs of $\{X\}$ and $\{Y\}$ \hl{encoded in the amplitudes, in order to extract the Hamming distances between the relevant $\left| x_i \right\rangle$, $\left| y_j \right\rangle$ we return to our initial basis} for register $\left| X \right\rangle$ by applying pairwise CNOT gates:
 %
 \begin{multline}
     \left| \psi_f \right\rangle = 
@@ -373,19 +379,19 @@ thus we return to our initial basis for register $\left| X \right\rangle$ by app
         \left| 1 \right\rangle\right] .
 \end{multline}
 %
-This makes $\{X\}$ store the input vectors again, as in the initial step. 
-It however preserves the amplitudes of the auxiliary qubit which are proportional to how different each pairs of $\{X\}$ and $\{Y\}$ are.
+This makes $\{X\}$ store the input vectors again, as in the initial step 
+and preserves the amplitudes of the auxiliary qubit which are proportional to how different each pairs of $\{X\}$ and $\{Y\}$ are.
 
 We thus have the Hamming distances encoded into the amplitudes of the final state. 
 From the statistics of the measurement outcomes, the distance matrix between two data sets of binary vectors can be obtained (Fig.~\ref{fig:distance_matrix}). 
 In this case, the biggest amplitude of the measurement result coincides with the smallest Hamming distance when the measurement result of the ancilla qubit is 0. 
-If the ancilla qubit is 1, there is an inverse relationship with the measurement result.  
+If the ancilla qubit is 1, the smallest amplitude of the measurement result coincides with the smallest Hamming distance.  
 
 Measuring the Hamming distance of a particular pair of input vectors $\left| X_i \right\rangle$ and cluster vector $\left| Y_j \right\rangle$ consists of extracting the relevant amplitude from the subspace that those states form, 
 this can be done using the following projection operator
 %
 \begin{align}
-\Pi_{i,j} = &\left| X_i \rangle\langle X_i \right| \otimes \left| X_i \rangle\langle Y_j \right| \otimes I .
+\Pi_{i,j} = &\left| X_i \rangle\langle X_i \right| \otimes \left| Y_j \rangle\langle Y_j \right| \otimes I .
 \end{align} 
 %
 Using the above projection operator, the subspace of the Hilbert space formed by a particular pair of input and cluster vectors can be traced out as
@@ -412,14 +418,12 @@ The Hamming distance measured in this way is bounded $0 \leq d_{i,j}^H \leq 1$,
 where  $0$ indicates that $x_i$ are $y_j$ identical and $1$ means they are completely opposite in terms of their pairwise binary coordinates.
 
 In comparison with the circuits for Hamming distance calculations proposed previously \cite{trugenberger2001}, 
-our method allows one to reduce the number of gates in the circuit and reconstruct all distance matrix in parallel and can be implemented with high fidelity.  
-We note that at least for the $2n$ one-qubit NOT gates, 
-this depends on the actual realization of the control phase gate in a quantum register at the hardware level.
+our method allows one to reduce the number of gates in the circuit (at least in $2n$ one-qubit NOT gates)
+and reconstruct all distance matrix in parallel and can be implemented with high fidelity.  
 
 
 %%%%%
 \begin{figure}[t]
-	\label{fig:vectorized_sample}
 	\includegraphics[width=0.95\columnwidth]{vectorized_sample.png}
 	\caption{
 		(a) Representation of the data set of abstracts with the bag-of-words model is shown. 
@@ -427,6 +431,7 @@ this depends on the actual realization of the control phase gate in a quantum re
 		The samples are sorted into groups (QML, MED, BIO) with 3 papers for each tag, for a total of 9 paper.    
 		(b) The Hamming distance between each vectorized abstract is shown as a number in the matrix. 
 	} 
+	\label{fig:vectorized_sample}
 \end{figure}
 %%%%%
 
@@ -448,7 +453,7 @@ this depends on the actual realization of the control phase gate in a quantum re
 
 
 
-\section{Expeirmental demonstration of QASOFM}
+\section{Experimental demonstration of QASOFM}
 
 We now show experimental results for a proof-of-concept demonstration of the algorithm introduced in the previous section, on a 16-qubit quantum computer provided by IBM Q Experience.  
 We perform unsupervised data clustering for three sets of paper abstracts from three different fields: 
@@ -459,7 +464,7 @@ Each set consists of three random papers that focus on one of following topics:
 ``Quantum Machine Learning'' (QML), 
 ``Cancer'' (MED) 
 and ``Gene Expression'' (BIO). 
-Abstracts were vectorized by the bag-of-words model in order to choose most defining words in each data set (see Fig.~\ref{fig:vectorized_sample}).  
+Abstracts were vectorized by the bag-of-words model in order to choose most defining words in each data set (see Fig.~\ref{fig:vectorized_sample}) \cite{mctear2016}.  
 This model represents text as a multiset ``bag'' of its words taking into account only multiplicity of words. 
 Preparing the bag-of-words we excluded the words that appear only in one abstract and more than in 4 abstracts and we also excluded the word ``level'' from consideration due to the frequent overlap between the clusters because it gives instabilities for both classical and quantum algorithms. 
 We restricted our bag-of-word size to 9 of the most frequent words from the full bags-of-word  due to limitations of the number of qubits. 
@@ -482,21 +487,27 @@ The complexity of the quantum assisted SOFM then scales as $O(LN)$.
 
 In order to check that our algorithm gives the expected results we compare it to classical calculations of the distance matrix on two data sets of binary vectors, as shown in Fig. \ref{fig:distance_matrix}.  
 We see good agreement between the distance matrices calculated classically and on the IBM Q Experience. 
-The theoretical calculations and classical simulations show perfect agreement with each other. 
+The theoretical calculations and classical simulations show perfect agreement with each other (Fig. \ref{fig:distance_matrix}(a)). 
+The difference between Figs. \ref{fig:distance_matrix} (a) and (b) appears due to noise in the currently available non fault-tolerant quantum processors.
 
 An example of the QASOFM learning process is shown in Fig.~\ref{convergence}. 
 Initially, the cluster vectors were randomly chosen (see Fig.~\ref{convergence}) 
 and the label of sample distribution is shown for the zeroth epoch in Fig.~\ref{convergence}(a). In order to prepare a superposition of cluster vectors needed for the calculation of the distance matrix we use the standard initialization of QISKIT library. 
-Each epoch of the algorithm requires 9 distance calculations in the  quantum implementation 
-(number of samples in general case) 
+Each epoch of the algorithm consists of distance calculation between all data and cluster vectors 
+and requires 9 distance calculations in the  quantum implementation ($N$ in general case) 
 or 27 distance calculations for classical realization 
-(product of number of samples and number of cluster vectors in general case). 
+($MN$ in general case). 
 After the distance calculation from each sample to all cluster vectors at each epoch we label each sample with the index of the closest cluster vector 
 and shift the closest cluster vectors to the sample one. 
 The shift is made by the change of the first binary element in the cluster vectors different from the sample one. 
-The evolution of the labels presented on Fig. ~\ref{convergence}(c).  Good convergence is already observed in the fourth epoch.
+The evolution of the labels presented on Fig. ~\ref{convergence}(c).  
+Good convergence is already observed in the fourth epoch.
 
-
+This proof of concept example shows that developing of noisy intermediate scale quantum hardware will allow to solve some practical problems in unsupervised manner with very simple encoding of categorical data to quantum register. 
+Furthermore, it shows that it is possible to develop distance based hybrid quantum classical algorithms 
+that speed up classical counterparts and can be implemented on near future quantum devices 
+and that further developing distance based hybrid algorithms, 
+that can learn in unsupervised manner, for categorical data such as genomic and so on has significant interest.
 
 %%%%%
 \begin{figure}[t]
@@ -504,7 +515,7 @@ The evolution of the labels presented on Fig. ~\ref{convergence}(c).  Good conve
 	\caption{
 		(a) Initial random binary vectors of cluster vectors (labeled as C0, C1, C2), 
 		for the selected 9 words from the bag of words model. 
-		(b) The result of applying our QASOFM implemented on the IBM Q Experience ``ibmq\_16\_melbourne'' backend. 
+		(b) The result of applying our QASOFM implemented on the IBM Q Experience simulator backend. 
 		Vectors mean cluster elements for BIO, MED, QML groups, 
 		for the C0, C1, C2 cluster vectors, respectively. 
 		(c) The evolution of label distribution on each learning epoch.
@@ -523,6 +534,10 @@ which is calculated using a hybrid quantum-classical procedure.
 We introduced an optimized circuit for Hamming distance calculations that can be implemented on currently available quantum computing devices with high fidelity. 
 Our quantum circuit performs the distance-computing component of a classical SOFMs algorithm 
 and in this way improve its performance. 
+The complexity of the quantum assisted SOFM scales as $O(LN)$ 
+while the complexity of the fully classical SOFM scales as $O(LMN)$, 
+where $N$ is number of samples, $M$ is number of randomly sampled cluster vectors, 
+and $L$ is number of the shifts of cluster vectors.
 Due to wide use of classical SOFMs in different areas of modern research and technology, 
 this can give opportunities for the use of QASOFM in practical applications in near term, outperforming classical algorithms.  
 
