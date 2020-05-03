@@ -465,7 +465,7 @@ Each set consists of three random papers that focus on one of following topics:
 ``Quantum Machine Learning'' (QML), 
 ``Cancer'' (MED) 
 and ``Gene Expression'' (BIO). 
-Abstracts were vectorized by the bag-of-words model in order to choose most defining words in each data set (see Fig.~\ref{fig:vectorized_sample}) \cite{mctear2016}.  
+Abstracts were vectorized by the bag-of-words\cite{weikang2016} model in order to choose most defining words in each data set (see Fig.~\ref{fig:vectorized_sample}) \cite{mctear2016}.  
 This model represents text as a multiset ``bag'' of its words taking into account only multiplicity of words. 
 Preparing the bag-of-words we excluded the words that appear only in one abstract and more than in 4 abstracts and we also excluded the word ``level'' from consideration due to the frequent overlap between the clusters because it gives instabilities for both classical and quantum algorithms. 
 We restricted our bag-of-word size to 9 of the most frequent words from the full bags-of-word  due to limitations of the number of qubits. 
