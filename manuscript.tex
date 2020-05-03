@@ -226,7 +226,7 @@ between each pair of binary vectors  of two sets taking advantage of quantum par
 	\caption{
 		Quantum circuit for the quantum parallelized Hamming distance calculating  between all pairs of binary vectors from two sets ${X}$ and ${Y}$ encoded \cite{trugenberger2001} in $X$ and $Y$ quantum registers   respectively.
 		First, we encoded information about pairwise different qubits in a quantum state of the $X$-register with applying the CNOT gates. 
-		Second, Hamming distance values are extracted into the amplitudes of superposition with the controled rotation around $z$-axis gate and Hadamard gates. 
+		Second, Hamming distance values are extracted into the amplitudes of superposition with the controled rotation around $z$-axis gate~(\ref{eq:controled_rotation}) and Hadamard gates. 
 		Finally, a quantum state of the $X$-register returned to the initial basis for information retrieval. 	
 	} 
 	\label{fig:qcircuit}
@@ -259,12 +259,12 @@ At the beginning and end of the procedure the $\left| X \right\rangle$ register 
 Meanwhile, during the procedure it stores the differences between input vectors and cluster states.
 
 Let us assume we have $k$ input vectors and $l$ cluster states. 
-The $i$th input vector and $j$th cluster vector are respectively denoted as $\left| X_i \right\rangle$, $\left| Y_j \right\rangle$. 
+The $i$th input vector and $j$th cluster vector are respectively denoted as $\left| x_i \right\rangle$, $\left| y_j \right\rangle$. 
 The registers $\left| X \right\rangle$ and $\left| Y \right\rangle$ are initialized to store the input vectors and cluster vectors according to
 %
 \begin{align}
-    \left| X \right\rangle  & = \frac{1}{\sqrt{k}} \sum\limits_{i=1}^{k} \left| X_i \right\rangle,  \\
-    \left| Y \right\rangle&  = \frac{1}{\sqrt{l}} \sum\limits_{j=1}^{l} \left| Y_j \right\rangle .
+    \left| X \right\rangle  & = \frac{1}{\sqrt{k}} \sum\limits_{i=1}^{k} \left| x_i \right\rangle,  \\
+    \left| Y \right\rangle&  = \frac{1}{\sqrt{l}} \sum\limits_{j=1}^{l} \left| y_j \right\rangle .
     \label{eq:encodnig}
 \end{align}
 % 
@@ -280,19 +280,17 @@ The two registers along with the auxiliary qubit comprise the initial state of t
 %
 where $\left| a \right\rangle$ is an auxiliary qubit in the state $\left| 0 \right\rangle$ initially.
 
-Given this initial state we may begin the processing of the problem. We start by applying a CNOT gate between $\left| X \right\rangle$ and $\left| Y \right\rangle$
+Given this initial state we may begin the processing of the problem. We start by applying a CNOT gate on $\left| x^{(\alpha)} y^{(\alpha)} \right\rangle$ and $\alpha = 1 \dots n$
 
-\begin{align}
-    | \psi_1 \rangle & = 
-    \mathrm{CNOT} (Y,X)| \psi_0 \rangle \nonumber \\
-		& =  
+\begin{equation}
+    | \psi_1 \rangle  =  
     \frac{1}{\sqrt{kl}} \sum_{i, j=1}^{k} 
     | d^{(1)}_{ij}, \dots, d^{(n)}_{ij} \rangle 
     | y^{(1)}_j, \dots, y^{(n)}_j \rangle
     | 0 \rangle 
-\end{align}
+\end{equation}
 %
-where $d^\alpha_{ij} = \mathrm{CNOT}(y^\alpha_i, x^\alpha_j)$, $\alpha = 1 \dots n$, and $i,j$ are the qubit indexes in the registers. 
+where $d^{(\alpha)}_{ij} = \mathrm{CNOT}(y^{(\alpha)}_i, x^{(\alpha)}_j)$, and $\alpha = 1 \dots n$  is the qubit index in the register. 
 At this stage of the computation the $\left| X \right\rangle$ no longer stores the input vectors,
 instead it stores the information about pairwise different qubits between the input vector $\{X\}$ and cluster vector $\{Y\}$. 
 Next, for each pair $\{X\}$ and $\{Y\}$, the accumulated information of all the differences is projected onto the amplitude of the superposed state. 
@@ -300,8 +298,8 @@ This is achieved by applying the Hadamard gate on auxiliary qubit,
 followed by a controlled rotation around $z$-axis gate on $\left| Xa \right\rangle$ defined as
 %
 \begin{equation}
-    \label{eq:control_phase_rotation}
-    R_{(X,a)}(\phi) = 
+    \label{eq:controled_rotation}
+    C_{R_z}(\phi) = 
     \begin{pmatrix}
         1 & 0 & 0 & 0 \\
         0 & e^{-i \frac \phi 2} & 0 & 0 \\
@@ -316,28 +314,33 @@ Finally, another Hadamard gate is applied on the ancilla qubit (see Fig. \ref{fi
 After the first Hadamard on the ancilla qubit the state is
 %
 \begin{equation}
-    \left| \psi_2 \right\rangle = H_a\left| \psi_1 \right\rangle = 
+    \left| \psi_2 \right\rangle = 
     \frac{1}{\sqrt{kl}}\sum\limits_{i, j=1}^{k} 
-    \left| d^{(1)}_{ij}, \dots, d^{(n)}_{ij} \right\rangle 
-    \left| y^{(1)}_j, \dots, y^{(n)}_j \right\rangle
+    \left| d_{ij} \right\rangle 
+    \left| y_j \right\rangle
     \dfrac{(\left| 0 \right\rangle + \left| 1 \right\rangle)}{\sqrt{2}}  .
 \end{equation}
 %
-Applying the controlled rotation around $z$-axis gate the state then becomes
+Applying the controlled rotation around $z$-axis gate on $\left| x^{(\alpha)} a \right\rangle$ where $\alpha = 1\dots n$ and the state then becomes
 %
 \begin{multline}
-    \left| \psi_3 \right\rangle = R_{(X,a)}\left(\dfrac{\pi}{n}\right)\left| \psi_2 \right\rangle
-    \\ = \dfrac{1}{\sqrt{2kl}}
-				\sum\limits_{i, j=1}^{k} 
-				\left| d^{(1)}_{ij}, \dots, d^{(n)}_{ij} \right\rangle 
-        \left| y^{(1)}_j, \dots, y^{(n)}_j \right\rangle 
-        \left| 0 \right\rangle
-        \\ + \dfrac{1}{\sqrt{2kl}}
-				\sum\limits_{i, j=1}^{k}
-        \exp\left(\dfrac{-i \pi}{n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
-        \left| d^{(1)}_{ij}, \dots, d^{(n)}_{ij} \right\rangle 
-\\ \times        \left| y^{(1)}_j, \dots, y^{(n)}_j \right\rangle 
-        \left| 1 \right\rangle
+    \left| \psi_3 \right\rangle  
+	= \dfrac{1}{\sqrt{2kl}} \sum\limits_{i, j=1}^{k} 
+		\exp\left(
+		    \dfrac{-i \pi}{2n}
+		    \sum\limits_{\alpha=1}^n d^{(\alpha)}_{ij}
+		\right)
+		\left| d_{ij} \right\rangle 
+		\left| y_j \right\rangle 
+		\left| 0 \right\rangle \\
+    + \dfrac{1}{\sqrt{2kl}} \sum\limits_{i, j=1}^{k}
+		\exp\left(
+		    \dfrac{i \pi}{2n}
+		    \sum\limits_{\alpha=1}^n d^{(\alpha)}_{ij} 
+		\right)
+		\left| d_{ij} \right\rangle  
+		\left| y_j \right\rangle 
+		\left| 1 \right\rangle
 \end{multline}
 %
 Applying another Hadamard on the ancilla qubit we obtain
@@ -345,17 +348,23 @@ Applying another Hadamard on the ancilla qubit we obtain
 \begin{multline}
     \left| \psi_4 \right\rangle = 
     \frac{1}{\sqrt{kl}}\sum\limits_{i, j=1}^{k} 
-    \exp \left(\dfrac{-i \pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
-		\\ \times
-        \left[ \cos\left(\dfrac{\pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
-        \left| d^{(1)}_{ij}, \dots, d^{(n)}_{ij} \right\rangle 
-        \left| y^{(1)}_j, \dots, y^{(n)}_j \right\rangle 
-        \left| 0 \right\rangle\right.
-        \\+ 
-        \left. i \sin\left(\dfrac{\pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
-        \left| d^{(1)}_{ij}, \dots, d^{(n)}_{ij} \right\rangle 
-        \left| y^{(1)}_j, \dots, y^{(n)}_j \right\rangle 
-        \left| 1 \right\rangle\right] .
+        \left[ 
+			\cos\left(
+			    \dfrac{\pi}{2n}
+			    \sum\limits_{\alpha=1}^n d^{(\alpha)}_{ij}
+			\right)
+			\left| d_{ij} \right\rangle 
+			\left| y_j \right\rangle 
+			\left| 0 \right\rangle\right.
+			\\+ 
+			\left. i \sin\left(
+			    \dfrac{\pi}{2n} 
+			    \sum\limits_{\alpha=1}^n d^{(\alpha)}_{ij} 
+			\right)
+			\left| d_{ij} \right\rangle 
+			\left| y_j \right\rangle 
+			\left| 1 \right\rangle
+		\right] .
 \end{multline}
 %
 This completes the step for projecting differences between pairs of $\{X\}$ and $\{Y\}$ onto the amplitude of the auxiliary qubit. 
@@ -367,19 +376,25 @@ the controlled rotation around $z$-axis gate ensures to change amplitudes of tho
 At this stage, the information regarding the differences between pairs of $\{X\}$ and $\{Y\}$ \hl{encoded in the amplitudes, in order to extract the Hamming distances between the relevant $\left| x_i \right\rangle$, $\left| y_j \right\rangle$ we return to our initial basis} for register $\left| X \right\rangle$ by applying pairwise CNOT gates:
 %
 \begin{multline}
-    \left| \psi_f \right\rangle = 
-    \mathrm{CNOT} (Y,X)\left| \psi_4 \right\rangle \\=  
+    \left| \psi_f \right\rangle =  
     \frac{1}{\sqrt{kl}}\sum\limits_{i, j=1}^{k} 
-    \exp \left(\dfrac{-i \pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
-				\left[ \cos\left(\dfrac{\pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
-        \left| X_i \right\rangle 
-        \left| Y_j \right\rangle 
+	\left[ 
+	    \cos\left(
+	        \dfrac{\pi}{2n}
+	        \sum\limits_{\alpha=1}^n d^{(\alpha)}_{ij} 
+	    \right)
+        \left| x_i \right\rangle 
+        \left| y_j \right\rangle 
         \left| 0 \right\rangle\right.
         \\+
-        \left. i \sin\left(\dfrac{\pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
-        \left| X_i \right\rangle 
-        \left| Y_j \right\rangle 
-        \left| 1 \right\rangle\right] .
+        \left. i \sin\left(
+            \dfrac{\pi}{2n}
+            \sum\limits_{\alpha=1}^n d^{(\alpha)}_{ij} 
+        \right)
+        \left| x_i \right\rangle 
+        \left| y_j \right\rangle 
+        \left| 1 \right\rangle
+    \right] .
 \end{multline}
 %
 This makes $\{X\}$ store the input vectors again, as in the initial step 
@@ -390,11 +405,11 @@ From the statistics of the measurement outcomes, the distance matrix between two
 In this case, the biggest amplitude of the measurement result coincides with the smallest Hamming distance when the measurement result of the ancilla qubit is 0. 
 If the ancilla qubit is 1, the smallest amplitude of the measurement result coincides with the smallest Hamming distance.  
 
-Measuring the Hamming distance of a particular pair of input vectors $\left| X_i \right\rangle$ and cluster vector $\left| Y_j \right\rangle$ consists of extracting the relevant amplitude from the subspace that those states form, 
+Measuring the Hamming distance of a particular pair of input vectors $\left| x_i \right\rangle$ and cluster vector $\left| y_j \right\rangle$ consists of extracting the relevant amplitude from the subspace that those states form, 
 this can be done using the following projection operator
 %
 \begin{align}
-\Pi_{i,j} = &\left| X_i \rangle\langle X_i \right| \otimes \left| Y_j \rangle\langle Y_j \right| \otimes I .
+\Pi_{i,j} = &\left| x_i \rangle\langle x_i \right| \otimes \left| y_j \rangle\langle y_j \right| \otimes I .
 \end{align} 
 %
 Using the above projection operator, the subspace of the Hilbert space formed by a particular pair of input and cluster vectors can be traced out as
@@ -411,7 +426,7 @@ From the state the following two amplitudes for the measurement results can be e
 \end{align}
 %
 In order to reduce noise we average the measurement results over different states of the ancilla qubit, 
-thus the measured Hamming distance between the input vector $\left| X_i \right\rangle$ and cluster vector $\left| Y_j \right\rangle$ is
+thus the measured Hamming distance between the input vector $\left| x_i \right\rangle$ and cluster vector $\left| y_j \right\rangle$ is
 %
 \begin{align}
     d_{i,j}^H & \propto 1 - \frac{1}{2}(a_0(x_i,y_j) + (1-a_1(x_i,y_j))) .
@@ -429,7 +444,7 @@ and reconstruct all distance matrix in parallel and can be implemented with high
 \begin{figure}[t]
 	\includegraphics[width=0.95\columnwidth]{vectorized_sample.png}
 	\caption{
-		(a) Representation of the data set of abstracts with the bag-of-words model is shown. 
+		(a) Representation of the data set of abstracts with the bag-of-words \cite{weikang2016} model is shown. 
 		Each abstract is represented by a binary vector with 9 elements, corresponding to the 9 words on the horizontal axis. 
 		The samples are sorted into groups (QML, MED, BIO) with 3 papers for each tag, for a total of 9 paper.    
 		(b) The Hamming distance between each vectorized abstract is shown as a number in the matrix. 
@@ -467,7 +482,7 @@ Each set consists of three random papers that focus on one of following topics:
 ``Quantum Machine Learning'' (QML), 
 ``Cancer'' (MED) 
 and ``Gene Expression'' (BIO). 
-Abstracts were vectorized by the bag-of-words\cite{weikang2016} model in order to choose most defining words in each data set (see Fig.~\ref{fig:vectorized_sample}) \cite{mctear2016}.  
+Abstracts were vectorized by the bag-of-words \cite{weikang2016} model in order to choose most defining words in each data set (see Fig.~\ref{fig:vectorized_sample}) \cite{mctear2016}.  
 This model represents text as a multiset ``bag'' of its words taking into account only multiplicity of words. 
 Preparing the bag-of-words we excluded the words that appear only in one abstract and more than in 4 abstracts and we also excluded the word ``level'' from consideration due to the frequent overlap between the clusters because it gives instabilities for both classical and quantum algorithms. 
 We restricted our bag-of-word size to 9 of the most frequent words from the full bags-of-word  due to limitations of the number of qubits. 
