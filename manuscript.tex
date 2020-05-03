@@ -214,17 +214,16 @@ such as to reduce the number of calculations in number of cluster vectors in com
 
 
 %%%%%
-\begin{figure*}[t]
-	\includegraphics[width=1.9\columnwidth]{qcircuit.png}
+\begin{figure}[t]
+	\includegraphics[width=\columnwidth]{qcircuit.eps}
 	\caption{
-		Quantum circuit for the quantum parallelized Hamming distance calculation between all samples and clusters. 
-		First,  Hadamard gates are applied in order to obtain a superposition of the sample and cluster registers. 
-		Second, we encoded information about pairwise different qubits in a quantum state of the sample register with applying the CNOT gates. 
-		Third, Hamming distance values are encoded in the amplitudes of superposition with the control phase rotation and Hadamard gates. 
-		Finally, a quantum state of the sample register returned to the initial basis for information retrieval. 	
+		Quantum circuit for the quantum parallelized Hamming distance calculating  between all pairs of binary vectors from two sets ${X}$ and ${Y}$ encoded \cite{trugenberger2001} in $X$ and $Y$ quantum registers   respectively.
+		First, we encoded information about pairwise different qubits in a quantum state of the $X$-register with applying the CNOT gates. 
+		Second, Hamming distance values are extracted into the amplitudes of superposition with the controled rotation around $z$-axis gate and Hadamard gates. 
+		Finally, a quantum state of the $X$-register returned to the initial basis for information retrieval. 	
 	} 
 	\label{fig:qcircuit}
-\end{figure*}
+\end{figure}
 %%%%%
 
 
@@ -294,16 +293,16 @@ At this stage of the computation the $\left| X \right\rangle$ no longer stores t
 instead it stores the information about pairwise different qubits between the input vector $\{X\}$ and cluster vector $\{Y\}$. 
 Next, for each pair $\{X\}$ and $\{Y\}$, the accumulated information of all the differences is projected onto the amplitude of the superposed state. 
 This is achieved by applying the Hadamard gate on auxiliary qubit, 
-followed by a controlled phase gate on $\left| Xa \right\rangle$ defined as
+followed by a controlled rotation around $z$-axis gate on $\left| Xa \right\rangle$ defined as
 %
 \begin{equation}
     \label{eq:control_phase_rotation}
     R_{(X,a)}(\phi) = 
     \begin{pmatrix}
         1 & 0 & 0 & 0 \\
-        0 & 1 & 0 & 0 \\
+        0 & e^{-i \frac \phi 2} & 0 & 0 \\
         0 & 0 & 1 & 0 \\
-        0 & 0 & 0 & e^{-i\phi}
+		0 & 0 & 0 & e^{i \frac \phi 2}
     \end{pmatrix} .
     \quad \phi = \frac{\pi}{n}
 \end{equation}
@@ -320,7 +319,7 @@ After the first Hadamard on the ancilla qubit the state is
     \dfrac{(\left| 0 \right\rangle + \left| 1 \right\rangle)}{\sqrt{2}}  .
 \end{equation}
 %
-Applying the controlled phase gate the state then becomes
+Applying the controlled rotation around $z$-axis gate the state then becomes
 %
 \begin{multline}
     \left| \psi_3 \right\rangle = R_{(X,a)}\left(\dfrac{\pi}{n}\right)\left| \psi_2 \right\rangle
@@ -359,7 +358,7 @@ This completes the step for projecting differences between pairs of $\{X\}$ and 
 The process is done in the $x$-basis, achieved by the surrounding Hadamard gates. 
 There are two possible measurement outcomes of the auxiliary qubit.  
 Each pair of $\{X\}$ and $\{Y\}$ forms a subspace of the Hilbert space, 
-the controlled phase gate ensures to change amplitudes of those outcomes within this subspace depending on how different the spin configurations between $\{X\}$ and $\{Y\}$ are.
+the controlled rotation around $z$-axis gate ensures to change amplitudes of those outcomes within this subspace depending on how different the spin configurations between $\{X\}$ and $\{Y\}$ are.
 
 At this stage, the information regarding the differences between pairs of $\{X\}$ and $\{Y\}$ \hl{encoded in the amplitudes, in order to extract the Hamming distances between the relevant $\left| x_i \right\rangle$, $\left| y_j \right\rangle$ we return to our initial basis} for register $\left| X \right\rangle$ by applying pairwise CNOT gates:
 %
