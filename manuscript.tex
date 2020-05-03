@@ -246,9 +246,10 @@ such as to reduce the number of calculations in number of cluster vectors in com
 
 
 
-We now introduce an optimized algorithm for calculating the matrix of Hamming distances \cite{trugenberger2001} between a sample vector and all cluster vectors, making use of quantum parallelism.  
-
-%This allows for a simple encoding of the classical information into a quantum register. 
+Using a known technique of encoding classical information into a quantum register, 
+based on probabilistic quantum memories \cite{trugenberger2001},
+we introduce an optimized algorithm for calculating the matrix of Hamming distances between each pair of binary vectors  of two sets taking advantage of quantum parallelism.
+This allows for a simple encoding of the classical information into a quantum register. 
 
 The overall procedure involves two registers of $n$ qubits each, denoted $\left| X \right\rangle$ and $\left| Y \right\rangle$, along with a single auxiliary qubit $\left| a \right\rangle$. 
 During the whole process, the $\left| Y \right\rangle$ register is used to store the cluster states.  
