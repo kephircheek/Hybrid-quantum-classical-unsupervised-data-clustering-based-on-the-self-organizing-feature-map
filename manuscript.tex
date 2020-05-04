@@ -156,46 +156,53 @@ and compare it to the classical case.
 The SOFM is one of the most widely-used unsupervised learning methods used in various areas of modern science. 
 It was first proposed by Kohonen as a self-organizing unsupervised learning algorithm which produces feature maps similar to those occurring in the brain \cite{solan2001}. 
 The SOFM algorithm operates with a set of input objects, each represented by a $N$-dimensional vector, 
-and describes a mapping from a higher-dimensional input space to a lower-dimensional map space.
+and describes a mapping from a higher-dimensional input space to a lower-dimensional map space, commonly a bi-dimensional map.
 
 The input dimensions are associated with the features, 
 and the nodes in the grid (called cluster vectors) are assigned the $N$-dimensional vectors. 
 The components of these vectors are usually called weights. 
-Initially the weight components are chosen randomly. 
-We then can train our SOFM adjusting the components through the learning process which occur in the two basic procedures of selecting a winning cluster vector and updating its weights (Fig.~\ref{fig:sofm_fitting}). 
-More specifically, they consist of four step process: \begin{enumerate*}
+Initially the weight components are chosen randomly 
+and topological distances between neurons given. 
+We then can train our SOFM adjusting the components through the learning process which occur in the two basic procedures of 
+selecting a winning cluster vector, also called the best matching unit (BMU), and updating its weights (Fig.~\ref{fig:sofm_fitting}). 
+More specifically, they consist of four step process: 
+\begin{enumerate*}
 \item selecting an input vector randomly from the set of all input vectors; 
-\item finding a cluster vector which is closest to the input vector; 
-\item adjusting the weights of the winning node in such a way that it becomes even closer to the input vector; 
+\item finding a cluster vector which is closest to the input vector (BMU); 
+\item adjusting the weights of the BMU and neurons close to it on feature map in such a way 
+	that these vectors  becomes even closer to the input vector; 
 \item repeating this process for many iterations until it converges.
 \end{enumerate*}
 
 
-After the winning cluster vector is selected, the weights of the vector are adjusted according to
+On a step $t$ when the BMU $w_{c}$ is selected, 
+the weights of the BMU and its neigbours on feature map are adjusted according to
 %
 \begin{equation}
-	\vec w_{i+1} =
-		\vec w_i
-		+ \alpha\left(\vec{x} - \vec w_i\right).
     \label{eq:learning}
+	\vec{w_{i}}(t + 1) 
+	= \vec{w_i}(t)
+	+ \theta(c, i, t) \alpha(t) 
+		\left(\vec{x}(t) - \vec{w_i}(t)\right),
 \end{equation}
 %
-The above expression can be interpreted according to: 
-if a component of the input vector $\vec{x}$ is greater than the corresponding weight $ \vec{w}_i $, 
-increase the weight by a small amount with the learning rate $\alpha$; 
-if the input component is smaller than the weight, decrease the weight by a small amount. 
-The larger the difference between the input component and the weight component, the larger the increment (decrement). 
+where  $\alpha(t)$ is the learning rate and $\theta(c, i, t)$ is the neighbor function,
+which defines the topological neighbor neurons to be updated. 
+Note that neighbor function depend on distance on feature map given initialy, 
+but not distance metrics between vectors. 
+
 Intuitively, this procedure can be geometrically interpreted as iteratively moving the cluster vectors in space one at a time in a way 
 that ensures each move is following the current trends inferred from their distances to the input objects. 
 A visualisation of this process is shown in Fig. \ref{fig:sofm_fitting}.
 
-Usually the winning cluster vector is selected based on the Euclidean distance between an input vector and the cluster vectors. 
-In our approach, we use the Hamming distance instead of the Euclidean distance to select the winning cluster vector. 
-It allows us to use a simpler encoding of the classical information into the quantum state and use an effective procedure for the calculation of the Hamming distance on the quantum machine, 
-such as to reduce the number of calculations in number of cluster vectors in comparison to the classical case.
-
-
-
+In SOFM original version was designed to cluster real-valued data
+and the winning cluster vector is selected based on the Euclidean distance between an input vector and the cluster vectors.
+The paper deals with binary vectors clustering problem 
+and for binary data the Hamming distance is more suitable \cite{appiah2009, santana2017}.
+Using a known technique of encoding classical information into a quantum register, 
+based on probabilistic quantum memories \cite{trugenberger2001},
+we introduce an optimized algorithm for calculating the matrix of Hamming distances 
+between each pair of binary vectors  of two sets taking advantage of quantum parallelism.
 
 
 
@@ -245,9 +252,6 @@ such as to reduce the number of calculations in number of cluster vectors in com
 
 
 
-We now introduce an optimized algorithm for calculating the matrix of Hamming distances \cite{trugenberger2001} between a sample vector and all cluster vectors, making use of quantum parallelism.  
-
-%This allows for a simple encoding of the classical information into a quantum register. 
 
 The overall procedure involves two registers of $n$ qubits each, denoted $\left| X \right\rangle$ and $\left| Y \right\rangle$, along with a single auxiliary qubit $\left| a \right\rangle$. 
 During the whole process, the $\left| Y \right\rangle$ register is used to store the cluster states.  
@@ -291,7 +295,8 @@ At this stage of the computation the $\left| X \right\rangle$ no longer stores t
 instead it stores the information about pairwise different qubits between the input vector $\{X\}$ and cluster vector $\{Y\}$. 
 Next, for each pair $\{X\}$ and $\{Y\}$, the accumulated information of all the differences is projected onto the amplitude of the superposed state. 
 This is achieved by applying the Hadamard gate on auxiliary qubit, 
-followed by a controlled rotation around $z$-axis gate on $\left| Xa \right\rangle$ defined as
+followed by a controlled rotation around z-axis gate~(\ref{eq:controled_rotation}) on $\left|a d_{ij}^{(\alpha)}\right\rangle$ 
+where $d_{ij}^{(\alpha)}$ is the control qubit and $\left| a \right\rangle$ ancilla qubit register is the target.
 %
 \begin{equation}
     \label{eq:controled_rotation}
@@ -440,7 +445,7 @@ and reconstruct all distance matrix in parallel and can be implemented with high
 \begin{figure}[t]
 	\includegraphics[width=0.95\columnwidth]{vectorized_sample.png}
 	\caption{
-		(a) Representation of the data set of abstracts with the bag-of-words model is shown. 
+		(a) Representation of the data set of abstracts with the bag-of-words \cite{weikang2016} model is shown. 
 		Each abstract is represented by a binary vector with 9 elements, corresponding to the 9 words on the horizontal axis. 
 		The samples are sorted into groups (QML, MED, BIO) with 3 papers for each tag, for a total of 9 paper.    
 		(b) The Hamming distance between each vectorized abstract is shown as a number in the matrix. 
@@ -478,7 +483,7 @@ Each set consists of three random papers that focus on one of following topics:
 ``Quantum Machine Learning'' (QML), 
 ``Cancer'' (MED) 
 and ``Gene Expression'' (BIO). 
-Abstracts were vectorized by the bag-of-words model in order to choose most defining words in each data set (see Fig.~\ref{fig:vectorized_sample}) \cite{mctear2016}.  
+Abstracts were vectorized by the bag-of-words \cite{weikang2016} model in order to choose most defining words in each data set (see Fig.~\ref{fig:vectorized_sample}) \cite{mctear2016}.  
 This model represents text as a multiset ``bag'' of its words taking into account only multiplicity of words. 
 Preparing the bag-of-words we excluded the words that appear only in one abstract and more than in 4 abstracts and we also excluded the word ``level'' from consideration due to the frequent overlap between the clusters because it gives instabilities for both classical and quantum algorithms. 
 We restricted our bag-of-word size to 9 of the most frequent words from the full bags-of-word  due to limitations of the number of qubits. 
