@@ -295,7 +295,8 @@ At this stage of the computation the $\left| X \right\rangle$ no longer stores t
 instead it stores the information about pairwise different qubits between the input vector $\{X\}$ and cluster vector $\{Y\}$. 
 Next, for each pair $\{X\}$ and $\{Y\}$, the accumulated information of all the differences is projected onto the amplitude of the superposed state. 
 This is achieved by applying the Hadamard gate on auxiliary qubit, 
-followed by a controlled rotation around z-axis gate~(\ref{eq:controled_rotation}) on $\left|a d_{ij}^{(\alpha)}\right\rangle$ where $d_{ij}^{(\alpha)}$ is the control qubit and $\left| a \right\rangle$ ancilla qubit register is the target.
+followed by a controlled rotation around z-axis gate~(\ref{eq:controled_rotation}) on $\left|a d_{ij}^{(\alpha)}\right\rangle$ 
+where $d_{ij}^{(\alpha)}$ is the control qubit and $\left| a \right\rangle$ ancilla qubit register is the target.
 %
 \begin{equation}
     \label{eq:controled_rotation}
