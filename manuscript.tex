@@ -436,11 +436,13 @@ thus the measured Hamming distance between the input vector $\left| x_i \right\r
 The Hamming distance measured in this way is bounded $0 \leq d_{i,j}^H \leq 1$, 
 where  $0$ indicates that $x_i$ are $y_j$ identical and $1$ means they are completely opposite in terms of their pairwise binary coordinates.
 
-Currently available quantum platforms are still subject to substantial level of noise and extracting the exact distance from amplitude is still a difficult task. Fortunately, for most of algorithms, SOFM included, the information of nearest vectors is sufficient. 
+Currently available quantum platforms are still subject to substantial level of noise and extracting the exact distance from amplitude is still a difficult task.
+Fortunately, for most of algorithms, SOFM included, the information of nearest vectors is sufficient. 
 
 Because of that property, those algorithms fall into a special case category for which, as there is only one input vector considered, the ``Decoding'' stage (Fig.\ref{fig:qcircuit}) can be removed as measurement no longer needs to indicate for which input vector the distance has been measured. In this special case scenario the circuit depth complexity is matching with \cite{shuld2014}.
 
-In the general case when multiple input vectors are present in the register, the ``Decoding'' stage still needs to be included leading to larger circuit depth and less attractive complexity in terms of number of controlled gate operations. The number of controlled gate operations in this general case of multiple input vectors is matching the number of controlled gate operations in \cite{trugenberger2001}.  
+In the general case when multiple input vectors are present in the register, the ``Decoding'' stage still needs to be included leading to larger circuit depth and less attractive complexity in terms of number of controlled gate operations.
+The number of controlled gate operations in this general case of multiple input vectors is matching the number of controlled gate operations in \cite{trugenberger2001}.  
 
 
 %%%%%
