@@ -5,4 +5,4 @@
 
 ### Changed
 - Figure `qcircuit`: add stages, removed measurements and initialization.
-- Measurement result explanation
+
