@@ -237,13 +237,13 @@ between each pair of binary vectors  of two sets taking advantage of quantum par
 
 %%%%%
 \begin{figure}[t]
-	\includegraphics[width=0.95\columnwidth]{distance_matrix.png}
+	\includegraphics[width=0.95\columnwidth]{distance_matrix.eps}
 	\caption{
-		(a) Hamming distance matrix between two data sets of binary vectors. 
-		Values of distance that are less than the median distance value are marked black. 
-		Classical simulation of the quantum circuit shows perfect agreement to theoretical calculations. 
-		(b) Result obtained on the IBM Q Experience ``ibmq\_16\_melbourne'' backend. 
-		We can see good agreement between the distance matrices calculated classically and on the IBM Q Experience.  
+		Hamming distance matrix between two data sets of binary vectors calculated on the IBM Q Experience. 
+		Since the information of closest vectors is sufficient values of distance that are less than 1.5 are marked black. 
+		Errors caused by noise in comparison with theoretical calulation are marked red cross.
+		Result obtained on the IBM Q Experience ``ibmq\_16\_meleourne'' backend. 
+		Fidelity of final state~(\ref{eq:final_state}) measurement is 0.8.
 	}
 	\label{fig:distance_matrix}
 \end{figure}
@@ -440,7 +440,8 @@ The Hamming distance measured in this way is bounded $0 \leq d_{i,j}^H \leq 1$,
 where  $0$ indicates that $x_i$ are $y_j$ identical and $1$ means they are completely opposite in terms of their pairwise binary coordinates.
 
 Currently available quantum platforms are still subject to substantial level of noise and extracting the exact distance from amplitude is still a difficult task.
-Fortunately, for most of algorithms, SOFM included, the information of nearest vectors is sufficient. 
+Fortunately, for most of algorithms, SOFM included, the information of nearest vectors is sufficient 
+and can be obtained with high fidelity~(Fig.~\ref{fig:distance_matrix}).
 
 Because of that property, those algorithms fall into a special case category for which, as there is only one input vector considered, the ``Decoding'' stage (Fig.~\ref{fig:qcircuit}) can be removed as measurement no longer needs to indicate for which input vector the distance has been measured.
 In this special case scenario the circuit depth complexity is matching with \cite{schuld2014}.
