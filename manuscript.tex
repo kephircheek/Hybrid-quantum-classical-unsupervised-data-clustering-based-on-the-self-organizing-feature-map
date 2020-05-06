@@ -377,6 +377,7 @@ the controlled rotation around $z$-axis gate ensures to change amplitudes of tho
 At this stage, the information regarding the differences between pairs of $\{X\}$ and $\{Y\}$ \hl{encoded in the amplitudes, in order to extract the Hamming distances between the relevant $\left| x_i \right\rangle$, $\left| y_j \right\rangle$ we return to our initial basis} for register $\left| X \right\rangle$ by applying pairwise CNOT gates:
 %
 \begin{multline}
+	\label{eq:final_state}
     \left| \psi_f \right\rangle =  
     \frac{1}{\sqrt{kl}}\sum\limits_{i, j=1}^{k} 
 	\left[ 
@@ -401,10 +402,12 @@ At this stage, the information regarding the differences between pairs of $\{X\}
 This makes $\{X\}$ store the input vectors again, as in the initial step 
 and preserves the amplitudes of the auxiliary qubit which are proportional to how different each pairs of $\{X\}$ and $\{Y\}$ are.
 
-We thus have the Hamming distances encoded into the amplitudes of the final state. 
-From the statistics of the measurement outcomes, the distance matrix between two data sets of binary vectors can be obtained (Fig.~\ref{fig:distance_matrix}). 
-In this case, the biggest amplitude of the measurement result coincides with the smallest Hamming distance when the measurement result of the ancilla qubit is 0. 
-If the ancilla qubit is 1, the smallest amplitude of the measurement result coincides with the smallest Hamming distance.  
+From the statistics of the measurement outcomes of final state~(\ref{eq:final_state}) we recreate the amplitudes of ancilla qubit states. 
+From those amplitudes estimations we are able to plot the distance matrix between two data sets of binary vectors.
+The probability amplitude of the ancilla qubit outcomes captures the exact Hamming distance as the result of the preprocessing function.
+There are two possible outcomes of measurement of the ancilla qubit, each has own probability amplitude and own interpretation of that amplitude. 
+For instance, for the \left| 0 \right\rangle outcome, the larger the amplitude the smaller the Hamming distance, 
+and for the \left| 1 \right\rangle outcome it is the other way around, magnitude of the amplitude of that outcome is proportional to the Hamming distance.
 
 Measuring the Hamming distance of a particular pair of input vectors $\left| x_i \right\rangle$ and cluster vector $\left| y_j \right\rangle$ consists of extracting the relevant amplitude from the subspace that those states form, 
 this can be done using the following projection operator
