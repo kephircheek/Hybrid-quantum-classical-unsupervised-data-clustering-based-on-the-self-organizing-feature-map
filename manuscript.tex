@@ -175,15 +175,15 @@ More specifically, they consist of four step process:
 \end{enumerate*}
 
 
-On a step $t$ when the BMU $w_{c}$ is selected, 
-the weights of the BMU and its neigbours on feature map are adjusted according to
+On a step $t$ when the BMU $\vec{w}_{c}$ for a input $\vec{x}(t)$ is selected, 
+the weights $\vec{w}_{i}$ of the BMU and its neigbours on feature map are adjusted according to
 %
 \begin{equation}
     \label{eq:learning}
-	\vec{w_{i}}(t + 1) 
-	= \vec{w_i}(t)
+	\vec{w}_{i}(t + 1) 
+	= \vec{w}_{i}(t)
 	+ \theta(c, i, t) \alpha(t) 
-		\left(\vec{x}(t) - \vec{w_i}(t)\right),
+		\left(\vec{x}(t) - \vec{w}_{i}(t)\right) ,
 \end{equation}
 %
 where  $\alpha(t)$ is the learning rate and $\theta(c, i, t)$ is the neighbor function,
@@ -193,7 +193,7 @@ but not distance metrics between vectors.
 
 Intuitively, this procedure can be geometrically interpreted as iteratively moving the cluster vectors in space one at a time in a way 
 that ensures each move is following the current trends inferred from their distances to the input objects. 
-A visualisation of this process is shown in Fig. \ref{fig:sofm_fitting}.
+A visualisation of this process is shown in Fig.~\ref{fig:sofm_fitting}.
 
 In SOFM original version was designed to cluster real-valued data
 and the winning cluster vector is selected based on the Euclidean distance between an input vector and the cluster vectors.
@@ -263,19 +263,19 @@ The $i$th input vector and $j$th cluster vector are respectively denoted as $\le
 The registers $\left| X \right\rangle$ and $\left| Y \right\rangle$ are initialized to store the input vectors and cluster vectors according to
 %
 \begin{align}
+    \label{eq:encodnig}
     \left| X \right\rangle  & = \frac{1}{\sqrt{k}} \sum\limits_{i=1}^{k} \left| x_i \right\rangle,  \\
     \left| Y \right\rangle&  = \frac{1}{\sqrt{l}} \sum\limits_{j=1}^{l} \left| y_j \right\rangle .
-    \label{eq:encodnig}
 \end{align}
 % 
 The two registers along with the auxiliary qubit comprise the initial state of the quantum computer according to
 %
 \begin{equation} 
-\left| \psi_0 \right\rangle = 
+    \label{eq:initial_state}
+	\left| \psi_0 \right\rangle = 
     \left| X \right\rangle
     \left| Y \right\rangle 
-    \left| a \right\rangle
-    \label{eq:initial_state}
+    \left| a \right\rangle ,
 \end{equation}
 %
 where $\left| a \right\rangle$ is an auxiliary qubit in the state $\left| 0 \right\rangle$ initially.
@@ -287,7 +287,7 @@ Given this initial state we may begin the processing of the problem. We start by
     \frac{1}{\sqrt{kl}} \sum_{i, j=1}^{k} 
     | d^{(1)}_{ij}, \dots, d^{(n)}_{ij} \rangle 
     | y^{(1)}_j, \dots, y^{(n)}_j \rangle
-    | 0 \rangle 
+    | 0 \rangle ,
 \end{equation}
 %
 where $d^{(\alpha)}_{ij} = \mathrm{CNOT}(y^{(\alpha)}_i, x^{(\alpha)}_j)$, and $\alpha = 1 \dots n$  is the qubit index in the register. 
@@ -306,11 +306,11 @@ where $d_{ij}^{(\alpha)}$ is the control qubit and $\left| a \right\rangle$ anci
         0 & e^{-i \frac \phi 2} & 0 & 0 \\
         0 & 0 & 1 & 0 \\
 		0 & 0 & 0 & e^{i \frac \phi 2}
-    \end{pmatrix} .
-    \quad \phi = \frac{\pi}{n}
+    \end{pmatrix} ,
+    \quad \phi = \frac{\pi}{n}.
 \end{equation}
 %
-Finally, another Hadamard gate is applied on the ancilla qubit (see Fig. \ref{fig:qcircuit}). 
+Finally, another Hadamard gate is applied on the ancilla qubit (see Fig.~\ref{fig:qcircuit}). 
 
 After the first Hadamard on the ancilla qubit the state is
 %
@@ -341,7 +341,7 @@ Applying the controlled rotation around $z$-axis gate on $\left| x^{(\alpha)} a 
 		\right)
 		\left| d_{ij} \right\rangle  
 		\left| y_j \right\rangle 
-		\left| 1 \right\rangle
+		\left| 1 \right\rangle .
 \end{multline}
 %
 Applying another Hadamard on the ancilla qubit we obtain
@@ -406,8 +406,8 @@ From the statistics of the measurement outcomes of final state~(\ref{eq:final_st
 From those amplitudes estimations we are able to plot the distance matrix between two data sets of binary vectors.
 The probability amplitude of the ancilla qubit outcomes captures the exact Hamming distance as the result of the preprocessing function.
 There are two possible outcomes of measurement of the ancilla qubit, each has own probability amplitude and own interpretation of that amplitude. 
-For instance, for the \left| 0 \right\rangle outcome, the larger the amplitude the smaller the Hamming distance, 
-and for the \left| 1 \right\rangle outcome it is the other way around, magnitude of the amplitude of that outcome is proportional to the Hamming distance.
+For instance, for the $\left| 0 \right\rangle$ outcome, the larger the amplitude the smaller the Hamming distance, 
+and for the $\left| 1 \right\rangle$ outcome it is the other way around, magnitude of the amplitude of that outcome is proportional to the Hamming distance.
 
 Measuring the Hamming distance of a particular pair of input vectors $\left| x_i \right\rangle$ and cluster vector $\left| y_j \right\rangle$ consists of extracting the relevant amplitude from the subspace that those states form, 
 this can be done using the following projection operator
@@ -442,8 +442,8 @@ where  $0$ indicates that $x_i$ are $y_j$ identical and $1$ means they are compl
 Currently available quantum platforms are still subject to substantial level of noise and extracting the exact distance from amplitude is still a difficult task.
 Fortunately, for most of algorithms, SOFM included, the information of nearest vectors is sufficient. 
 
-Because of that property, those algorithms fall into a special case category for which, as there is only one input vector considered, the ``Decoding'' stage (Fig.\ref{fig:qcircuit}) can be removed as measurement no longer needs to indicate for which input vector the distance has been measured.
-In this special case scenario the circuit depth complexity is matching with \cite{shuld2014}.
+Because of that property, those algorithms fall into a special case category for which, as there is only one input vector considered, the ``Decoding'' stage (Fig.~\ref{fig:qcircuit}) can be removed as measurement no longer needs to indicate for which input vector the distance has been measured.
+In this special case scenario the circuit depth complexity is matching with \cite{schuld2014}.
 
 In the general case when multiple input vectors are present in the register, the ``Decoding'' stage still needs to be included leading to larger circuit depth and less attractive complexity in terms of number of controlled gate operations.
 The number of controlled gate operations in this general case of multiple input vectors is matching the number of controlled gate operations in \cite{trugenberger2001}.  
@@ -506,20 +506,20 @@ The complexity of algorithm, in the sense of the number of distance calculations
 where $N$ is number of samples, 
 $M$ is number of randomly sampled cluster vectors, 
 and $L$ is number of the shifts of cluster vectors.  
-In the QASOFM described in the previous section, distance calculations are realized on a quantum device (i.e. the IBM Q Experience) with the use of circuit presented in Fig. \ref{fig:qcircuit}. This approach allows one to reduce the number of operations in a number of cluster states with an optimized number of gates 
+In the QASOFM described in the previous section, distance calculations are realized on a quantum device (i.e. the IBM Q Experience) with the use of circuit presented in Fig.~\ref{fig:qcircuit}. This approach allows one to reduce the number of operations in a number of cluster states with an optimized number of gates 
 that are possible to realize on  quantum computing devices that are currently available. 
 The circuit realized in such a manner 
 that calculation of Hamming distance between the sample vector and all cluster vectors is realized in one operation. 
 The complexity of the quantum assisted SOFM then scales as $O(LN)$. 
 
-In order to check that our algorithm gives the expected results we compare it to classical calculations of the distance matrix on two data sets of binary vectors, as shown in Fig. \ref{fig:distance_matrix}.  
+In order to check that our algorithm gives the expected results we compare it to classical calculations of the distance matrix on two data sets of binary vectors, as shown in Fig.~\ref{fig:distance_matrix}.  
 We see good agreement between the distance matrices calculated classically and on the IBM Q Experience. 
-The theoretical calculations and classical simulations show perfect agreement with each other (Fig. \ref{fig:distance_matrix}(a)). 
-The difference between Figs. \ref{fig:distance_matrix} (a) and (b) appears due to noise in the currently available non fault-tolerant quantum processors.
+The theoretical calculations and classical simulations show perfect agreement with each other (Fig.~\ref{fig:distance_matrix}(a)). 
+The difference between Figs.~\ref{fig:distance_matrix} (a) and (b) appears due to noise in the currently available non fault-tolerant quantum processors.
 
 An example of the QASOFM learning process is shown in Fig.~\ref{convergence}. 
 Initially, the cluster vectors were randomly chosen (see Fig.~\ref{convergence}) 
-and the label of sample distribution is shown for the zeroth epoch in Fig.~\ref{convergence}(a). In order to prepare a superposition of cluster vectors needed for the calculation of the distance matrix we use the standard initialization of QISKIT library. 
+and the label of sample distribution is shown for the zeroth epoch in Fig.~\ref{convergence}(a). In order to prepare a superposition of cluster vectors needed for the calculation of the distance matrix we use the standard initialization of QISKIT\cite{qiskit} library. 
 Each epoch of the algorithm consists of distance calculation between all data and cluster vectors 
 and requires 9 distance calculations in the  quantum implementation ($N$ in general case) 
 or 27 distance calculations for classical realization 
@@ -527,7 +527,7 @@ or 27 distance calculations for classical realization
 After the distance calculation from each sample to all cluster vectors at each epoch we label each sample with the index of the closest cluster vector 
 and shift the closest cluster vectors to the sample one. 
 The shift is made by the change of the first binary element in the cluster vectors different from the sample one. 
-The evolution of the labels presented on Fig. ~\ref{convergence}(c).  
+The evolution of the labels presented on Fig.~\ref{convergence}(c).  
 Good convergence is already observed in the fourth epoch.
 
 This proof of concept example shows that developing of noisy intermediate scale quantum hardware will allow to solve some practical problems in unsupervised manner with very simple encoding of categorical data to quantum register. 
@@ -566,7 +566,12 @@ while the complexity of the fully classical SOFM scales as $O(LMN)$,
 where $N$ is number of samples, $M$ is number of randomly sampled cluster vectors, 
 and $L$ is number of the shifts of cluster vectors.
 Due to wide use of classical SOFMs in different areas of modern research and technology, 
-this can give opportunities for the use of QASOFM in practical applications in near term, outperforming classical algorithms. In addition, as our algorithm performs the Hamming distance calculation, it has potential to enhance any classical algorithm that relies on calculating distances between data entries of vector form. In machine learning, data science, statistics and optimization, distance is a common way of representing similarity, calculating it between large data sets is common procedure and our circuit could potentially enhance other distance-based algorithms as long as exact distance is not required, but when knowledge of nearest vectors is sufficient.
+this can give opportunities for the use of QASOFM in practical applications in near term, outperforming classical algorithms. 
+In addition, as our algorithm performs the Hamming distance calculation, 
+it has potential to enhance any classical algorithm that relies on calculating distances between data entries of vector form. 
+In machine learning, data science, statistics and optimization, distance is a common way of representing similarity, calculating it between large data sets is common procedure 
+and our circuit could potentially enhance other distance-based algorithms as long as exact distance is not required, 
+but when knowledge of nearest vectors is sufficient.
 
 
 
@@ -596,6 +601,4 @@ quantum self-organizing feature map; quantum machine learning; neural network; q
 \bibliographystyle{naturemag}
 \bibliography{bibliography}
 
-%\begin{thebibliography}{99}
-%\end{thebibliography}
 \end{document}
