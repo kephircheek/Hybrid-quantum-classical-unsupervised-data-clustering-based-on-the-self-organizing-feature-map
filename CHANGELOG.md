@@ -2,7 +2,7 @@
 
 ### Added
 - Summary of quantum Hamming distance calculation `review.ipnb`	 
-- Generalization of method in disscussion section 
+- Made a more broad statement about our algorithm potential so that paper does not end suddenly.
 
 ### Changed
 - Figure `qcircuit`: add stages, removed measurements and initialization.
