@@ -1,5 +1,6 @@
 ## [Unreleased]
 
+## Marek and Ilia corrections v0.0.4
 ### Added
 - Summary of quantum Hamming distance calculation `review.ipnb`	 
 - Made a more broad statement about our algorithm potential so that paper does not end suddenly.
