@@ -164,19 +164,19 @@ The components of these vectors are usually called weights.
 Initially the weight components are chosen randomly 
 and topological distances between neurons given. 
 We then can train our SOFM adjusting the components through the learning process which occur in the two basic procedures of 
-selecting a winning cluster vector, also called the best matching unit (BMU), and updating its weights (Fig.~\ref{fig:sofm_fitting}). 
+selecting a winning cluster vector, also called the best matching unit, and updating its weights (Fig.~\ref{fig:sofm_fitting}). 
 More specifically, they consist of four step process: 
 \begin{enumerate*}
 \item selecting an input vector randomly from the set of all input vectors; 
-\item finding a cluster vector which is closest to the input vector (BMU); 
-\item adjusting the weights of the BMU and neurons close to it on feature map in such a way 
+\item finding a cluster vector which is closest to the input vector; 
+\item adjusting the weights of the best matching unit and neurons close to it on feature map in such a way 
 	that these vectors  becomes even closer to the input vector; 
 \item repeating this process for many iterations until it converges.
 \end{enumerate*}
 
 
-On a step $t$ when the BMU $\vec{w}_{c}$ for a input $\vec{x}(t)$ is selected, 
-the weights $\vec{w}_{i}$ of the BMU and its neigbours on feature map are adjusted according to
+On a step $t$ when the best matching unit $\vec{w}_{c}$ for a input $\vec{x}(t)$ is selected, 
+the weights $\vec{w}_{i}$ of the best matching unit and its neigbours on feature map are adjusted according to
 %
 \begin{equation}
     \label{eq:learning}
