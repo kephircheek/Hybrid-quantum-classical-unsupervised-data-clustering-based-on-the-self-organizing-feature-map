@@ -17,7 +17,7 @@
 \usepackage[inline]{enumitem} % inline enumeration
 
 \begin{document}
-\title{Hybrid quantum-classical unsupervised data clustering on the basis of Self-Organizing Feature Map}
+\title{Hybrid quantum-classical unsupervised data clustering based on the Self-Organizing Feature Map}
 
 \author{I.~D.~Lazarev}
 \affiliation{Institute of Problems of Chemical Physics of Russian Academy of Sciences, Acad. Semenov av. 1, Chernogolovka, Moscow Region, Russia, 142432}
@@ -45,8 +45,8 @@
 \begin{abstract}
 	Unsupervised machine learning is one of the main techniques in artificial intelligence.
 	Quantum computers offer opportunities to speed up such machine learning techniques.
-	Here, we propose a realization of quantum assisted unsupervised data clustering using the self-organizing feature map artificial neural networks.
-	We make a proof-of-concept realization of one of the central components of the approach on the IBM Q Experience
+	Here, we propose a realization of quantum assisted unsupervised data clustering using the self-organizing feature map, a type of artificial neural networks.
+	We make a proof-of-concept realization of one of the central components on the IBM Q Experience
 	and show that it allows us to reduce the number of calculations in a number of clusters.
 	We compare the results with the classical algorithm on a toy example of unsupervised text clustering.
 \end{abstract}
@@ -61,7 +61,7 @@
 \section{Introduction}
 The combination of big data and artificial intelligence ---  dubbed the fourth industrial revolution --- has profoundly affected the modern economy in a plethora of different ways from robotics to agriculture \cite{Lecun2015, ghahramani2015,schwab2017,esteva2019, tyrsa2017}.
 Contemporary artificial intelligence methods based on neural networks also have the potential to enhance the role of novel analytical methods in science and engineering \cite{kaggle2014, radovic2018, butler2018, radovic2018}.
-Paradoxically, the intrinsic mechanism of how neural networks work and why are so powerful remains unknown (in many cases it is regarded as a black box).
+Paradoxically, the intrinsic mechanism of how neural networks work and why they are so powerful remains unknown (in many cases it is regarded as a black box).
 It has been speculated that limits to the neural network paradigm based on the computational power of von Neumann architecture are being approached,
 and improvements appear only due to heuristic escalation of complexity \cite{marcus2018,sze2017,kourtis2020}.
 
@@ -78,18 +78,20 @@ Quantum algorithms were developed to perform  linear regression, principal compo
 More recently, there has been attention on developing quantum neural networks \cite{kamruzzaman2019, schuld2014b, jeswal2019, broughton2020}.
 The interest in quantum neural networks was inspired by progress in experimental quantum computing when it became possible to use parametrized quantum circuits,
 where the parameters behave much like the weights of a neural network \cite{lewenstein1994}.
-In particular, quantum algorithms for training and evaluating feedforward neural networks was developed,
-which are one of the most usable neural network models \cite{allcock2018, tacchino2019}. Quantum models for convolutional neural networks, which may be suitable for the problems of learning of quantum states were also proposed \cite{cong2019, liu2019}. Recent results connecting the classical Bayesian approach to deep learning allowed for the development of a new algorithm for Bayesian deep learning on quantum computers \cite{zhao2019}. For the problem of classification which is closely connected to the problem of clusterization, a protocol of quantum classification, tested on the MNIST dataset, via slow feature analysis based on the use of quantum Frobenius distance was proposed \cite{kerenidis2018}. Furthermore, many other hybrid and quantum protocols inspired classical neural networks were developed  \cite{li2019, killoran2019, bondarenko2019, dunjko2017, nautrup2019, foesel2018, rebentrost2018, purushothaman1997, verdon2019, cherny2019, byrnes2013, mishra2019, pyrkov2019, vinci2019, lu2019}. At the same time, non-neural-network based hybrid quantum classical algorithms have become a new direction of significant interest \cite{mcclean2016,arute2020,akshay2020}.
-Such hybrid algorithms involve as a part some quantum circuits for speed-up and usually trained in a standard classical learning loop.
+In particular, quantum algorithms for training and evaluating feedforward neural networks were developed,
+which are one of the most usable neural network models \cite{allcock2018, tacchino2019}. Quantum models for convolutional neural networks, which may be suitable for the problems of learning of quantum states were also proposed \cite{cong2019, liu2019}. Recent results connecting the classical Bayesian approach to deep learning allowed for the development of a new algorithm for Bayesian deep learning on quantum computers \cite{zhao2019}. For the problem of classification which is closely connected to the problem of clusterization, a protocol of quantum classification, tested on the MNIST dataset, via slow feature analysis based on the use of quantum Frobenius distance was proposed \cite{kerenidis2018}. Furthermore, many other hybrid and quantum protocols inspired classical neural networks were developed  \cite{li2019, killoran2019, bondarenko2019, dunjko2017, nautrup2019, foesel2018, rebentrost2018, purushothaman1997, verdon2019, cherny2019, byrnes2013, mishra2019, pyrkov2019, vinci2019, lu2019}.
+
+At the same time, non-neural-network based hybrid quantum classical algorithms have become a new direction of significant interest \cite{mcclean2016,arute2020,akshay2020}.
+Such hybrid algorithms involve quantum circuits used for part of the execution and is typically trained in a classical learning loop.
 In particular, the Quantum Approximate Optimization Algorithm was developed to find approximate solutions to combinatorial optimization problems \cite{farhi2014,farhi2016}
-and designed to problems such as MAX-CUT, Grover’s search algorithm and so on \cite{arute2020,akshay2020,wang2018,jiang2017,huang2019,wecker2016,pagano2019}.
-Another example of well-known hybrid quantum classical algorithms is Variational Quantum Eigensolver (VQE) for applications in quantum chemistry
+and designed for problems such as MAX-CUT and Grover's algorithm \cite{arute2020,akshay2020,wang2018,jiang2017,huang2019,wecker2016,pagano2019}.
+Another example of a well-known hybrid quantum classical algorithm is the Variational Quantum Eigensolver (VQE) for applications in quantum chemistry
 \cite{kandala2017,aspuru-guzik2005,lanyon2010,peruzzo2014}.
 Currently, it is believed that implementation of quantum neural networks and hybrid quantum classical algorithms can be the main test bed to achieve practical quantum supremacy on noisy intermediate scale quantum (NISQ) devices.
 
-In this paper, we develop a hybrid quantum assisted SOFM (QASOFM)
-and apply it to the data clustering problem in an unsupervised manner. The idea is based on the use of the Hamming distance as a distance metric for the training the SOFM that allows, in quantum case, to reduce the number of distance calculations in the number of clusters and thus to speed up the original classical protocol with assistance of quantum computational machines.
-In order to make our protocol more appropriate for the currently available NISQ quantum devices, we optimized a circuit for realizing the Hamming distance with reducing number of one-qubit operations. We then apply it to a toy example of clustering paper abstracts and give a proof-of-concept realization of the quantum assisted SOFM on the IBM Q experience quantum computer \cite{ibmq}
+In this paper, we develop a hybrid quantum-assisted SOFM (QASOFM)
+and apply it to the data clustering problem in an unsupervised manner. The idea is based on the use of the Hamming distance as a distance metric for the training the SOFM that allows, in the quantum case, to reduce the number of distance calculations in the number of clusters and thus to speed up the original classical protocol.
+In order to make our protocol more appropriate for the currently available generation of NISQ quantum devices, we optimized a circuit for realizing the Hamming distance by reducing number of one-qubit operations. We then apply it to a toy example of clustering paper abstracts and give a proof-of-concept realization of the quantum assisted SOFM on the IBM Q experience quantum computer \cite{ibmq}
 and compare it to the classical case.
 
 \begin{figure}
@@ -141,14 +143,14 @@ and compare it to the classical case.
 The SOFM is one of the most widely-used unsupervised learning methods used in various areas of modern science.
 It was first proposed by Kohonen as a self-organizing unsupervised learning algorithm which produces feature maps similar to those occurring in the brain \cite{solan2001}.
 The SOFM algorithm operates with a set of input objects, each represented by a $N$-dimensional vector,
-and describes a mapping from a higher-dimensional input space to a lower-dimensional map space that preserve the topological properties of the input space, commonly a bi-dimensional map.
+and describes a mapping from a higher-dimensional input space to a lower-dimensional map space that preserves the topological properties of the input space, commonly a bi-dimensional map.
 
 The input dimensions are associated with the features,
 and the nodes in the grid (called cluster vectors) are assigned the $N$-dimensional vectors.
 The components of these vectors are usually called weights.
 Initially the weight components are chosen randomly.
-We then can train our SOFM adjusting the components through the learning process which occur in the two basic procedures of
-selecting a winning cluster vector, also called the best matching unit, and updating its weights (Fig.~\ref{fig:sofm_fitting}).
+We then train our SOFM by adjusting the components through the learning process which occur in the two basic procedures of
+selecting a winning cluster vector, also called the best matching unit (BMU), and updating its weights (Fig.~\ref{fig:sofm_fitting}).
 More specifically, they consist of four step process:
 \begin{enumerate*}
 \item selecting an input vector randomly from the set of all input vectors;
@@ -170,11 +172,11 @@ the weights $\vec{w}_{i}$ of the best matching unit and its neighbors on feature
 		\left(\vec{x}(t) - \vec{w}_{i}(t)\right) ,
 \end{equation}
 %
-where  $\alpha(t)$ is the monotonically decreasing learning rate and $\theta(c, i, t)$ is the neighborhood function (usually Gaussian, Delta or the mexican-hat function) which defines the vicinity of the BMU noted by index $c$ in which the weights also should be adjusted and depends on distance on feature map. This expression can be interpreted according to: if a component of the input vector $\vec{x}(t)$ is greater than the corresponding weight $ \vec{w}_{i}(t) $, increase the weight of the BMU and the weights indexed by $i$ and defined with the neighborhood function by a small amount defined by the learning rate $\alpha(t)$; if the input component is smaller than the weight, decrease the weight by a small amount. The larger the difference between the input component and the weight component, the larger the increment (decrement).
+where  $\alpha(t)$ is the monotonically decreasing learning rate and $\theta(c, i, t)$ is the neighborhood function (usually Gaussian or Delta) which defines the vicinity of the BMU noted by index $c$ in which the weights also should be adjusted and depends on distance on feature map. This expression can be interpreted according to: if a component of the input vector $\vec{x}(t)$ is greater than the corresponding weight $ \vec{w}_{i}(t) $, increase the weight of the BMU and the weights indexed by $i$ and defined with the neighborhood function by a small amount defined by the learning rate $\alpha(t)$; if the input component is smaller than the weight, decrease the weight by a small amount. The larger the difference between the input component and the weight component, the larger the increment (decrement).
 
-Intuitively, this procedure can be geometrically interpreted as iteratively moving the cluster vectors defined by the corresponding weight $ \vec{w}_{i}(t) $ (blue triangles on Fig.~\ref{fig:sofm_fitting}) in space one at a time in a way that ensures each move is following the current trends inferred from their distances to the input objects defined by $\vec{x}(t)$ (red dots on Fig.~\ref{fig:sofm_fitting}). A visualisation of this process is shown in Fig.~\ref{fig:sofm_fitting}.
+Intuitively, this procedure can be geometrically interpreted as iteratively moving the cluster vectors defined by the corresponding weight $ \vec{w}_{i}(t) $ (blue triangles on Fig.~\ref{fig:sofm_fitting}) in space one at a time in a way that ensures each move is following the current trends inferred from their distances to the input objects defined by $\vec{x}(t)$ (red dots on Fig.~\ref{fig:sofm_fitting}).
 
-In the original version of SOFM, the winning cluster vector was selected based on the Euclidean distance between an input vector and the cluster vectors. In this paper we deal with binary vectors clustering problem and for binary data the Hamming distance is more suitable \cite{appiah2009, santana2017}.
+In the original version of SOFM, the winning cluster vector was selected based on the Euclidean distance between an input vector and the cluster vectors. In this paper we deal with a binary vector clustering problem, where the Hamming distance is more suitable \cite{appiah2009, santana2017}.
 Using a simple technique of encoding classical binary information into a quantum register \cite{trugenberger2001},
 we introduce an optimized algorithm for calculating the matrix of Hamming distances between all input and cluster vectors at once.
 
@@ -191,11 +193,11 @@ we introduce an optimized algorithm for calculating the matrix of Hamming distan
 %%%%%
 \begin{figure}[t]
 	\includegraphics[width=\columnwidth]{qcircuit.eps}
-	\caption{ \hl{Iliya, could you please change the picture to the case with the controlled phase gate and make correction of the caption in appropriate way}
-		Quantum circuit for the quantum parallelized Hamming distance calculating  between all pairs of binary vectors from two sets ${X}$ and ${Y}$ encoded in $X$ and $Y$ quantum registers   respectively.
-		First, we encoded information about pairwise different qubits in a quantum state of the $X$-register with applying the CNOT gates.
-		Second, Hamming distance values are extracted into the amplitudes of superposition with the controled rotation around $z$-axis gate(see Eq.~(\ref{eq:controled_rotation})) and Hadamard gates.
-		Finally, a quantum state of the $X$-register returned to the initial basis for information retrieval.
+    \caption{
+		Quantum circuit for the quantum parallelized Hamming distance calculation between all pairs of binary vectors from two sets ${X}$ and ${Y}$.
+		First, we encode information about pairwise different qubits in a quantum state of the $X$-register by applying the CNOT gates.
+		Second, the Hamming distance values are extracted to the amplitudes of superposition with the control phase rotation (see Eq.~(\ref{eq:controled_phase_rotation})) and Hadamard gates.
+		Finally, a quantum space of the $X$-register is returned to the initial basis for information retrieval.
 	}
 	\label{fig:qcircuit}
 \end{figure}
@@ -206,11 +208,11 @@ we introduce an optimized algorithm for calculating the matrix of Hamming distan
 %%%%%
 \begin{figure}[t]
 	\includegraphics[width=0.95\columnwidth]{distance_matrix.png}
-	\caption{\hl{[AP: Iliya, could you please recalculate the fidelity for this picture it looks that it is even higher for thee picture because there is basically less red crosses and rewrite the caption in the appropriate way]}
+	\caption{
 		Hamming distance matrix between two data sets of binary vectors.
-		Values of distance that less than median distance value was marked black. The classical simulation of the quantum circuit shows perfect agreement to theoretical calculations and presented on the left figure. Result obtained on  IBMQ "ibmq\_16\_melbourne" backend is shown on the right figure.
-		Result obtained on the IBM Q Experience ``ibmq\_16\_melbourne'' backend.
-		Fidelity of final state~(\ref{eq:final_state}) measurement is 0.8.}
+		Values of distance that less than median distance value was marked black.
+		The classical simulation of the quantum circuit shows perfect agreement to theoretical calculations and presented on the left figure.
+		Result obtained on  IBMQ ``ibmq\_16\_melbourne'' backend is shown on the right figure.
 	}
 	\label{fig:distance_matrix}
 \end{figure}
@@ -242,13 +244,11 @@ The two registers along with the auxiliary qubit comprise the initial state of t
 	\left| \psi_0 \right\rangle =
     \left| X \right\rangle
     \left| Y \right\rangle
-    \left| a \right\rangle ,
+    \left| 0 \right\rangle.
 \end{equation}
+
+Given this initial state we may begin the processing of the problem.  The quantum circuit that we follow is shown in Fig.\ref{fig:qcircuit}. We start by elementwise applying CNOT gates between all the qubits of the $X$ and $Y$ registers (the ``Encoding'' part of Fig. \ref{fig:qcircuit})
 %
-where $\left| a \right\rangle$ is an auxiliary qubit in the state $\left| 0 \right\rangle$ initially.
-
-Given this initial state we may begin the processing of the problem.  The quantum circuit that we follow is shown in Fig.\ref{fig:qcircuit}. We start by elementwise applying CNOT gates between all the qubits of the X and Y registers (the "Encoding" part of Fig. \ref{fig:qcircuit}) $\left| x^{(\alpha)} y^{(\alpha)} \right\rangle$
-
 \begin{equation}
     | \psi_1 \rangle  =
     \frac{1}{\sqrt{N_x N_y}} \sum_{i, j=1}^{N_x,N_y}
@@ -261,10 +261,10 @@ where $d^{(\alpha)}_{ij} = \mathrm{CNOT}(y^{(\alpha)}_i, x^{(\alpha)}_j)$, and $
 At this stage of the computation the $\left| X \right\rangle$ no longer stores the input vectors,
 instead it stores the information about pairwise different qubits between the input vectors $\left| x_i \right\rangle$ and cluster vector $\left| y_j \right\rangle$.
 
-The next step, depicted on the Fig.\ref{fig:qcircuit} as the "Extraction" stage, is to extract the accumulated information about the differences between each pair $\left| x_i \right\rangle$ and $\left| y_j \right\rangle$ by projection onto the amplitude of the superposed state. This is achieved by applying the Hadamard gate on auxiliary qubit, followed by a controlled phase gate on $\left|a\right\rangle \left|d_{ij}^{(\alpha)}\right\rangle$
+The next step, depicted on the Fig.\ref{fig:qcircuit} as the ``Extraction'' stage, is to extract the accumulated information about the differences between each pair $\left| x_i \right\rangle$ and $\left| y_j \right\rangle$ by projection onto the amplitude of the superposed state. This is achieved by applying the Hadamard gate on the auxiliary qubit, followed by a controlled phase gate on $\left|a\right\rangle \left|d_{ij}^{(\alpha)}\right\rangle$, where the phase gate is defined by
 %~(\ref{eq:control_phase_rotation})
 \begin{equation}
-    \label{eq:control_phase_rotation}
+    \label{eq:controled_phase_rotation}
     R_{(X,a)}(\phi) =
     \begin{pmatrix}
         1 & 0 & 0 & 0 \\
@@ -288,7 +288,7 @@ After the first Hadamard on the ancilla qubit the state is
 \end{equation}
 %
 where $\left| d_{ij} \right\rangle = \left| d_{ij}^{(1)},\ldots,d_{ij}^{(n)} \right\rangle$.
-Applying the controlled phase gate on $\left| x^{(\alpha)} a \right\rangle$ where $\alpha = 1\dots n$ and the state then becomes
+Applying the controlled phase gate on $\left| x^{(\alpha)} a \right\rangle$, where $\alpha = 1\dots n$  the state then becomes
 %
 \begin{multline}
     \left| \psi_3 \right\rangle = R_{(X,a)}\left(\dfrac{\pi}{n}\right)\left| \psi_2 \right\rangle
