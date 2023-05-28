@@ -3,6 +3,7 @@
 .buffer
 
 ## Core latex/pdflatex auxiliary files:
+*Notes.bib
 *.aux
 *.lof
 *.log
