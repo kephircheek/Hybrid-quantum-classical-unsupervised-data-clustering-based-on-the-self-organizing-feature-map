@@ -61,9 +61,12 @@
 
 
 \section{Introduction}
-The combination of big data and artificial intelligence ---  dubbed the fourth industrial revolution --- has profoundly affected the modern economy in a plethora of different ways from robotics to agriculture \cite{Lecun2015, ghahramani2015,schwab2017,esteva2019, tyrsa2017}.
+The combination of big data and artificial intelligence --  dubbed the fourth industrial revolution -- has profoundly affected the modern economy in a plethora of different ways from robotics to agriculture \cite{Lecun2015, ghahramani2015,schwab2017,esteva2019, tyrsa2017}.
 Contemporary artificial intelligence methods based on neural networks also have the potential to enhance the role of novel analytical methods in science and engineering \cite{kaggle2014, radovic2018, butler2018, radovic2018}.
-Paradoxically, the intrinsic mechanism of how neural networks work and why they are so powerful remains unknown (in many cases it is regarded as a black box).
+In 2022-2023, AI and neural networks experienced remarkable advancements, sparking substantial excitement in the field, particularly with the emergence of ChatGPT-4.
+Nonetheless, the quantity of parameters in such neural networks rapidly increase, leading to a significant impact on their interpretability and, consequently, their trustworthiness.
+Paradoxically, the intrinsic mechanism of how such neural networks work and why they are so powerful remains unknown (in many cases it is regarded as universal black box oracle).
+Additionally, these black-box oracles demand substantial resources for their training and exhibit a propensity to overfit when data is scarce \cite{sevilla2022compute}, in contrast to the human ability to effectively learn from "small" data.
 It has been speculated that limits to the neural network paradigm based on the computational power of von Neumann architecture are being approached,
 and improvements appear only due to heuristic escalation of complexity \cite{marcus2018,sze2017,kourtis2020}.
 
@@ -74,14 +77,22 @@ and in comparison with many other artificial neural networks, they apply competi
 The SOFMs represent data in a fundamentally topological way that allows one to perform dimensionality reduction.
 Once it is trained, the map can classify a vector from the input space by finding the node with the smallest distance metric.
 
-Meanwhile, there has been much interest recently in applying quantum computing techniques to machine learning \cite{dunjko2018, biamonte2017, schuld2014, carleo2019}.
+On the other hand, with recent technological advancements, quantum computation has moved beyond its academic roots.
+Although, its present scale may not yet rival classical computation, there is considerable excitement within this field and high expectations for rapid developments for commercial opportunities in the near future.
+In 2022, the Nobel Prize in Physics honored groundbreaking contributions to quantum information science, the Breakthrough Prize in Fundamental Physics recognized achievements in quantum communication and quantum computing, and IBM unveiled a quantum computer of 433 qubits.
+According to their roadmaps, companies such as IBM and Origin Quantum will empower their NISQ processors with more than 1000 qubits by 2024 and 2025, respectively.
+Recently, a lot of new algorithms were developed for such devices (see \cite{Cerezo2021,Bharti2022} for comprehensive review).
+In particular, there has been much interest recently in applying quantum computing techniques to machine learning \cite{dunjko2018, biamonte2017, schuld2014, carleo2019, Benedetti2019, Cerezo2022, Sajjan2022}.
 The main focus of early works in quantum machine learning (QML) was in obtaining a quantum speedup \cite{biamonte2017, schuld2014} by applying quantum approaches to solve linear algebra problems, such as the Fourier transform or solving systems of linear equations \cite{wiebe2012,harrow2009,childs2017}.
 Quantum algorithms were developed for  linear regression, principal component analysis, support vector machine, K-means algorithm and others \cite{lloyd2013,lloyd2014,dunjko2016,paparo2014,rebentrost2014}.
 More recently, there has been attention on developing quantum neural networks \cite{kamruzzaman2019, schuld2014b, jeswal2019, broughton2020}.
 The interest in quantum neural networks was inspired by progress in experimental quantum computing when it became possible to use parametrized quantum circuits,
-where the parameters behave much like the weights of a neural network \cite{lewenstein1994}.
+where the parameters behave much like the weights of a neural network \cite{lewenstein1994,Benedetti2019}.
 In particular, quantum algorithms for training and evaluating feedforward neural networks were developed,
-which are one of the most usable neural network models \cite{allcock2018, tacchino2019}. Quantum models for convolutional neural networks, which may be suitable for the problems of learning of quantum states were also proposed \cite{cong2019, liu2019}. Recent results connecting the classical Bayesian approach to deep learning allowed for the development of a new algorithm for Bayesian deep learning on quantum computers \cite{zhao2019}. For the problem of classification which is closely connected to the problem of clusterization, a protocol of quantum classification, tested on the MNIST dataset, via slow feature analysis based on the use of quantum Frobenius distance was proposed \cite{kerenidis2018}. Furthermore, many other hybrid and quantum protocols inspired classical neural networks were developed  \cite{li2019, killoran2019, bondarenko2019, dunjko2017, nautrup2019, foesel2018, rebentrost2018, purushothaman1997, verdon2019, cherny2019, byrnes2013, mishra2019, pyrkov2019, vinci2019, lu2019}.
+which are one of the most usable neural network models \cite{allcock2018, tacchino2019}. Quantum models for convolutional neural networks, which may be suitable for the problems of learning of quantum states were also proposed \cite{cong2019, liu2019}. Recent results connecting the classical Bayesian approach to deep learning allowed for the development of a new algorithm for Bayesian deep learning on quantum computers \cite{zhao2019}. For the problem of classification which is closely connected to the problem of clusterization, a protocol of quantum classification, tested on the MNIST dataset, via slow feature analysis based on the use of quantum Frobenius distance was proposed \cite{kerenidis2018}. 
+A quantum capsule network together with an efficient quantum dynamic routing algorithm was proposed \cite{Liu2022}.
+A quantum version of vision transformer architecture was developed for quantum many-body systems \cite{Viteritti2023} that provides possibilities for quantum natural language processing.
+Furthermore, many other hybrid and quantum protocols inspired classical neural networks were developed  \cite{li2019, Heese2022, killoran2019, bondarenko2019, dunjko2017, nautrup2019, foesel2018, rebentrost2018, purushothaman1997, verdon2019, cherny2019, byrnes2013, mishra2019, pyrkov2019, vinci2019, lu2019}.
 
 At the same time, non-neural-network based hybrid quantum classical algorithms have become a new direction of significant interest \cite{mcclean2016,arute2020,akshay2020}.
 Such hybrid algorithms involve quantum circuits used for part of the execution and is typically trained in a classical learning loop.
@@ -89,7 +100,7 @@ In particular, the Quantum Approximate Optimization Algorithm (QAOA) was develop
 and designed for problems such as MAX-CUT and Grover's algorithm \cite{arute2020,akshay2020,wang2018,jiang2017,huang2019,wecker2016,pagano2019,byrnes2018}.
 Another example of a well-known hybrid quantum classical algorithm is the Variational Quantum Eigensolver (VQE) for applications in quantum simulations
 \cite{kandala2017,aspuru-guzik2005,lanyon2010,peruzzo2014}.
-Currently, it is believed that implementation of quantum neural networks and hybrid quantum classical algorithms can be the main test bed to achieve practical quantum supremacy on Noisy Intermediate Scale Quantum (NISQ) devices \cite{preskill2018}.
+Currently, it is believed that implementation of quantum neural networks and hybrid quantum classical algorithms can be the main test bed to achieve practical quantum supremacy on Noisy Intermediate Scale Quantum (NISQ) devices \cite{preskill2018,Bharti2022,Cerezo2021}.
 
 In this paper, we develop a hybrid quantum-assisted SOFM (QASOFM)
 and apply it to the data clustering problem in an unsupervised manner. The idea is based on the use of the Hamming distance as a distance metric for the training the SOFM that allows, in the quantum case, to reduce the number of distance calculations in the number of clusters and thus to speed up the original classical protocol.
