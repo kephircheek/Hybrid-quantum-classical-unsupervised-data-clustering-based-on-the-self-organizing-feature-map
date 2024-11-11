@@ -501,6 +501,60 @@ that can learn in an unsupervised manner, for categorical data such as genomic d
 \end{figure}
 %%%%%
 
+\begin{figure}[t]
+  \includegraphics[width=\columnwidth]{tomography-errors-by-shots-n4.eps}
+  \caption{%
+  }
+  \label{fig:tomography-errors-by-shots-n4}
+\end{figure}
+
+\begin{figure}[t]
+  \includegraphics[width=\columnwidth]{tomography-errors-by-shots-n5.eps}
+  \caption{%
+  }
+  \label{fig:tomography-errors-by-shots-n5}
+\end{figure}
+
+
+\section{Scalability and robustness}
+
+Most quantum algorithms face three main scaling problems.
+The first is the exponential increase in the number of iterations of the quantum circuit required.
+This is not necessary in QASOFM\@.
+SOFM assumes that the cluster points do not have to move monotonically towards the cluster centroids,
+and that the vectors closest to the true BMU have the highest probability of being measured.
+The number of runs should only be chosen based on a given accuracy of BMU selection.
+It will only affect the speed of reaching the centres of the clusters.
+Fig.~\ref{fig:tomography-errors-by-shots-n4} and Fig.~\ref{fig:tomography-errors-by-shots-n5} show the dependence of the number of tomography errors of vectors
+which differ by no more than one bit (see Fig.~\ref{fig:distance_matrix}) on the number of shots.
+Here, tomography implies the determination of all pairs of nearest vectors in the whole state space.
+In Fig.~\ref{fig:tomography-errors-by-shots-n4} shows the state space of $2^4$ vectors, and Fig.~\ref{fig:tomography-errors-by-shots-n5} --- $2^5$ vectors.
+The points in Fig.~\ref{fig:tomography-errors-by-shots-n4} and Fig.~\ref{fig:tomography-errors-by-shots-n5} are the number of misidentified neighbors
+by the quantum circuit run on a noise simulator taking into account parameters of the real quantum platform.
+The lines are the result of a regression analysis of these data.
+The coefficient of determination of the model is $R^2 = 0.82$ for the state space of $2^4$ and $R^2 = 0.9$ for $2^5$.
+The triangles are the number of neighbors misidentified by the quantum scheme run on the IBM quantum backend named ``ibm\_sherbrook''.
+The number of errors decreases exponentially as the number of shots increases linearly.
+In contrast to QASOFM,
+tomography with increasing state space requires an exponential increase in the number of shots
+to distinguish neighbors of different orders.
+
+The second problem is a linear increase in a number of connections required for a single qubit.
+In QASOFM, this is the ancilla that accumulates distances in phase.
+Currently, this is a significant limitation for scaling on platforms with a rigid topology,
+such as IBM or Google Sycamore processors.
+For this reason, we cannot implement an algorithm for a larger problem.
+The only solution is to create a large auxiliary network,
+but this requires numerous two-qubit operations,
+which are currently performed with insufficient accuracy.
+Other approaches to implementing the quantum platform,
+for example for ions in traps or Bose-Einstein condensates,
+are likely to overcome this limitation.
+
+The third problem is the difficulty of converting digital data into a quantum state.
+The dimension of the data is usually much larger than the number of cluster vectors.
+Consequently, the size of the subspace stretched over the cluster vectors will be negligible compared to the whole space.
+This makes it possible to efficiently generate quantum circuits to initialise such superposition quantum states.
 
 
 \section{Discussions}
