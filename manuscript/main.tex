@@ -45,12 +45,12 @@
 \date{\today}
 
 \begin{abstract}
-	Unsupervised machine learning is one of the main techniques employed in artificial intelligence.
-	Quantum computers offer opportunities to speed up such machine learning techniques.
-	Here, we introduce an algorithm for  quantum assisted unsupervised data clustering using the self-organizing feature map, a type of artificial neural network.
-	We make a proof-of-concept realization of one of the central components on the IBM Q Experience
-	and show that it allows us to reduce the number of calculations in a number of clusters.
-	We compare the results with the classical algorithm on a toy example of unsupervised text clustering.
+  Unsupervised machine learning is one of the main techniques employed in artificial intelligence.
+  Quantum computers offer opportunities to speed up such machine learning techniques.
+  Here, we introduce an algorithm for  quantum assisted unsupervised data clustering using the self-organizing feature map, a type of artificial neural network.
+  We make a proof-of-concept realization of one of the central components on the IBM Q Experience
+  and show that it allows us to reduce the number of calculations in a number of clusters.
+  We compare the results with the classical algorithm on a toy example of unsupervised text clustering.
 \end{abstract}
 
 
@@ -108,16 +108,16 @@ In order to make our protocol more appropriate for the currently available gener
 and compare it to the classical case.
 
 \begin{figure}
-  	\includegraphics[width=0.95\columnwidth]{sofm_fitting.png}
-	\caption{
-		Schematic illustration of the clustering problem considered in this paper.
-		Blue triangles represent clusters and red circles are data points.
-		The training process moves clusters to fit the data points.
-		Note that there are fewer clusters than data points,
-		which is the essence of dimensionality reduction,
-		and is what permits the model to generalize the data.
-	}
-	\label{fig:sofm_fitting}
+    \includegraphics[width=0.95\columnwidth]{sofm_fitting.png}
+  \caption{
+    Schematic illustration of the clustering problem considered in this paper.
+    Blue triangles represent clusters and red circles are data points.
+    The training process moves clusters to fit the data points.
+    Note that there are fewer clusters than data points,
+    which is the essence of dimensionality reduction,
+    and is what permits the model to generalize the data.
+  }
+  \label{fig:sofm_fitting}
 \end{figure}
 
 
@@ -169,7 +169,7 @@ More specifically, they consist of the four step process:
 \item select an input vector randomly from the set of all input vectors;
 \item find a cluster vector which is closest to the input vector;
 \item adjust the weights of the best matching unit and neurons close to it on the feature map in such a way
-	that these vectors  becomes closer to the input vector;
+  that these vectors  becomes closer to the input vector;
 \item repeat this process for many iterations until it converges.
 \end{enumerate*}
 
@@ -179,10 +179,10 @@ the weights $\vec{w}_{i}$ of the best matching unit and its neighbors on the fea
 %
 \begin{equation}
     \label{eq:learning}
-	\vec{w}_{i}(t + 1)
-	= \vec{w}_{i}(t)
-	+ \theta(c, i, t) \alpha(t)
-		\left(\vec{x}(t) - \vec{w}_{i}(t)\right) .
+  \vec{w}_{i}(t + 1)
+  = \vec{w}_{i}(t)
+  + \theta(c, i, t) \alpha(t)
+    \left(\vec{x}(t) - \vec{w}_{i}(t)\right) .
 \end{equation}
 %
 Here,  $\alpha(t)$ is the monotonically decreasing learning rate and $\theta(c, i, t)$ is the neighborhood function (usually taken as a Gaussian or delta function) which defines the vicinity of the BMU labeled by an index $c$, the weights of the neighbors in the vicinity should also be adjusted in the same manner as for the BMU. This expression can be understood in the following way: if a component of the input vector $\vec{x}(t)$ is greater than the corresponding weight $ \vec{w}_{i}(t) $, increase the weight of the BMU and the weights indexed by $i$ and defined with the neighborhood function by a small amount defined by the learning rate $\alpha(t)$; if the input component is smaller than the weight, decrease the weight by a small amount. The larger the difference between the input component and the weight component, the larger the increment or decrement.
@@ -248,7 +248,7 @@ The two registers along with the auxiliary qubit comprise the initial state of t
 %
 \begin{equation}
     \label{eq:initial_state}
-	\left| \psi_0 \right\rangle =
+  \left| \psi_0 \right\rangle =
     \left| X \right\rangle
     \left| Y \right\rangle
     \left| 0 \right\rangle.
@@ -300,12 +300,12 @@ Applying the controlled phase gate on $\left| x^{(\alpha)} a \right\rangle$, whe
 \begin{multline}
     \left| \psi_3 \right\rangle = R_{(X,a)}\left(\dfrac{\pi}{n}\right)\left| \psi_2 \right\rangle
      = \dfrac{1}{\sqrt{2 N_x N_y}}
-				\sum\limits_{i, j=1}^{N_x,N_y}
-				\left| d_{ij} \right\rangle
+        \sum\limits_{i, j=1}^{N_x,N_y}
+        \left| d_{ij} \right\rangle
         \left| y_j \right\rangle
         \left| 0 \right\rangle
         \\ + \dfrac{1}{\sqrt{2 N_x N_y}}
-				\sum\limits_{i, j=1}^{N_x,N_y}
+        \sum\limits_{i, j=1}^{N_x,N_y}
         \exp\left(\dfrac{-i \pi}{n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
         \left| d_{ij} \right\rangle
         \left| y_j \right\rangle
@@ -318,7 +318,7 @@ Applying another Hadamard on the ancilla qubit we obtain
     \left| \psi_4 \right\rangle =
     \frac{1}{\sqrt{N_x N_y}}\sum\limits_{i, j=1}^{N_x,N_y}
     \exp \left(\dfrac{-i \pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
-		\\ \times
+    \\ \times
         \left[ \cos\left(\dfrac{\pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
         \left| d_{ij} \right\rangle
         \left| y_j \right\rangle
@@ -339,12 +339,12 @@ the controlled phase gate ensures to change amplitudes of those outcomes within 
 At this stage, the information regarding the differences between pairs of $\left| x_i \right\rangle$ and $\left| y_j \right\rangle$ is encoded in the amplitudes. In order to extract the Hamming distances between the relevant $\left| x_i \right\rangle$, $\left| y_j \right\rangle$ we return to our initial basis for register $\left| X \right\rangle$ by applying pairwise CNOT gates:
 %
 \begin{multline}
-		\label{eq:final_state}
+    \label{eq:final_state}
     \left| \psi_f \right\rangle =
     \mathrm{CNOT} (Y,X)\left| \psi_4 \right\rangle \\=
     \sum\limits_{i, j=1}^{N_x,N_y}
     \exp \left(\dfrac{-i \pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
-				\left[ \cos\left(\dfrac{\pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
+        \left[ \cos\left(\dfrac{\pi}{2n}\sum\limits_{l=1}^n d^{(l)}_{ij} \right)
         \left| x_i \right\rangle
         \left| y_j \right\rangle
         \left| 0 \right\rangle\right.
@@ -404,14 +404,14 @@ The number of controlled gate operations to define the full distance matrix matc
 %%%%%
 \begin{figure}[t]
     \centering
-	\includegraphics[width=0.95\columnwidth]{vectorized_sample.pdf}
-	\caption{
-		(a) Representation of the data set of abstracts with the bag-of-words \cite{weikang2016} model is shown.
-		Each abstract is represented by a binary vector with 9 elements, corresponding to the 9 words on the horizontal axis.
-		The samples are sorted into groups ``Quantum Machine Learning'' (QML), ``Cancer'' (MED) and ``Gene Expression'' (BIO) with 3 papers for each tag, for a total of 9 paper.
-		(b) The Hamming distance between each vectorized abstract is shown as a number in the matrix.
-	}
-	\label{fig:vectorized_sample}
+  \includegraphics[width=0.95\columnwidth]{vectorized_sample.pdf}
+  \caption{
+    (a) Representation of the data set of abstracts with the bag-of-words \cite{weikang2016} model is shown.
+    Each abstract is represented by a binary vector with 9 elements, corresponding to the 9 words on the horizontal axis.
+    The samples are sorted into groups ``Quantum Machine Learning'' (QML), ``Cancer'' (MED) and ``Gene Expression'' (BIO) with 3 papers for each tag, for a total of 9 paper.
+    (b) The Hamming distance between each vectorized abstract is shown as a number in the matrix.
+  }
+  \label{fig:vectorized_sample}
 \end{figure}
 %%%%%
 
@@ -488,16 +488,16 @@ that can learn in an unsupervised manner, for categorical data such as genomic d
 
 %%%%%
 \begin{figure}[t]
-	\includegraphics[width=0.95\columnwidth]{convergence.png}
-	\caption{
-		(a) Initial random binary vectors of cluster vectors (labeled as C0, C1, C2),
-		for the selected 9 words from the bag of words model.
-		(b) The result of applying our QASOFM implemented on the IBM Q Experience simulator backend.
-		Vectors mean cluster elements for BIO, MED, QML groups,
-		for the C0, C1, C2 cluster vectors, respectively.
-		(c) The evolution of label distribution on each learning epoch.
-	}
-	\label{convergence}
+  \includegraphics[width=0.95\columnwidth]{convergence.png}
+  \caption{
+    (a) Initial random binary vectors of cluster vectors (labeled as C0, C1, C2),
+    for the selected 9 words from the bag of words model.
+    (b) The result of applying our QASOFM implemented on the IBM Q Experience simulator backend.
+    Vectors mean cluster elements for BIO, MED, QML groups,
+    for the C0, C1, C2 cluster vectors, respectively.
+    (c) The evolution of label distribution on each learning epoch.
+  }
+  \label{convergence}
 \end{figure}
 %%%%%
 
