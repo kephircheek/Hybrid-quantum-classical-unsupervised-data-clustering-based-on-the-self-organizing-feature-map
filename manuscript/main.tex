@@ -194,19 +194,13 @@ Using a simple technique of encoding classical binary information into a quantum
 we introduce an optimized algorithm for calculating the matrix of Hamming distances between all input and cluster vectors at once.
 
 
-
-
-
-
-
 \subsection{Optimized quantum scheme for Hamming distance calculation}
 \label{subsec:qcircuit}
 
 
-%%%%%
 \begin{figure}[t]
 	\includegraphics[width=\columnwidth]{qcircuit.eps}
-    \caption{
+  \caption{%
 		Quantum circuit for the quantum parallelized Hamming distance calculation between all pairs of binary vectors from two sets ${X}$ and ${Y}$.
 		First, we encode information about pairwise different qubits in a quantum state of the $X$-register by applying the CNOT gates.
 		Second, the Hamming distance values are extracted to the amplitudes of superposition with the control phase rotation (see Eq.~(\ref{eq:controled_phase_rotation})) and Hadamard gates.
@@ -214,22 +208,22 @@ we introduce an optimized algorithm for calculating the matrix of Hamming distan
 	}
 	\label{fig:qcircuit}
 \end{figure}
-%%%%%
 
 
 
-%%%%%
 \begin{figure}[t]
-	\includegraphics[width=0.95\columnwidth]{distance_matrix.png}
-	\caption{
-		Hamming distance matrix between two data sets of binary vectors.
-		Values of distance that less than median distance value was marked black.
-		The classical simulation of the quantum circuit shows perfect agreement to theoretical calculations and presented on the left figure.
-		Result obtained on  IBMQ ``ibmq\_16\_melbourne'' backend is shown on the right figure and the accuracy in comparison with the classical simulation is more than 92 $\%$.
-	}
-	\label{fig:distance_matrix}
+  \includegraphics[width=\columnwidth]{distance_matrix.eps}
+  \caption{%
+    Result of tomography of all vector pairs that differ by up to one bit --- neighbors.
+    Distance values less than 1.7 are marked black.
+    Distance calculated by $\bar d_{ij} = (d_{ij} + d_{ji}) / 2$,
+    where $d_{ij}$ is extracted from amplitudes by~(\ref{eq:amplitudes2distance}).
+    Amplitudes obtained on the IBM quantum backend named ``ibm\_sherbrook'' with only 8192 shots.
+    Question marks and crosses indicate missing and erroneous results compared to theoretical calculations.
+    The accuracy compared to classical simulation is better than 97 $\%$.
+  }
+  \label{fig:distance_matrix}
 \end{figure}
-%%%%%
 
 
 
@@ -392,9 +386,9 @@ From the reduced density matrix, the following two amplitudes for the measuremen
 %
 Currently available quantum platforms are still subject to a substantial level of noise and extracting the exact distance from amplitude is still a difficult task. In order to reduce noise we average the measurement results over different states of the ancillary qubit, thus the measured Hamming distance between the input vector $\left| x_i \right\rangle$ and cluster vector $\left| y_j \right\rangle$ is
 %
-\begin{align}
-    d_{i,j}^H & \propto 1 - \frac{1}{2}(a_0(x_i,y_j) + (1-a_1(x_i,y_j))) .
-\end{align}
+\begin{equation}\label{eq:amplitudes2distance}
+    d_{i,j}^H \propto 1 - \frac{1}{2}(a_0(x_i,y_j) + (1-a_1(x_i,y_j))).
+\end{equation}
 %
 The Hamming distance measured in this way is bounded $0 \leq d_{i,j}^H \leq 1$,
 where  $0$ indicates that $x_i$ and $y_j$ are identical and $1$ means they are the completely opposite in terms of their pairwise binary coordinates.
