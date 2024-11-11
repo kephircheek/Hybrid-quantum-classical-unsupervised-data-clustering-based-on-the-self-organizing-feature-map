@@ -199,14 +199,14 @@ we introduce an optimized algorithm for calculating the matrix of Hamming distan
 
 
 \begin{figure}[t]
-	\includegraphics[width=\columnwidth]{qcircuit.eps}
+  \includegraphics[width=\columnwidth]{qcircuit.eps}
   \caption{%
-		Quantum circuit for the quantum parallelized Hamming distance calculation between all pairs of binary vectors from two sets ${X}$ and ${Y}$.
-		First, we encode information about pairwise different qubits in a quantum state of the $X$-register by applying the CNOT gates.
-		Second, the Hamming distance values are extracted to the amplitudes of superposition with the control phase rotation (see Eq.~(\ref{eq:controled_phase_rotation})) and Hadamard gates.
-		Finally, a quantum space of the $X$-register is returned to the initial basis for information retrieval.
-	}
-	\label{fig:qcircuit}
+    Example of quantum circuit for the quantum parallelized Hamming distance calculation between all pairs of 4-bit binary vectors from two sets ${X}$ and ${Y}$.
+    First, we encode information about pairwise different qubits in a quantum state of the $X$-register by applying the CNOT gates.
+    Second, the Hamming distance values are extracted to the amplitudes of superposition with the control phase rotation (see Eq.~(\ref{eq:controled_phase_rotation})) and Hadamard gates.
+    Finally, a quantum space of the $X$-register is returned to the initial basis for information retrieval.
+  }
+  \label{fig:qcircuit}
 \end{figure}
 
 
