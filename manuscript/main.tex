@@ -61,38 +61,32 @@
 
 
 \section{Introduction}
-The combination of big data and artificial intelligence --  dubbed the fourth industrial revolution -- has profoundly affected the modern economy in a plethora of different ways from robotics to agriculture \cite{Lecun2015, ghahramani2015,schwab2017,esteva2019, tyrsa2017}.
+The combination of big data and artificial intelligence (AI) --  dubbed the fourth industrial revolution -- has profoundly affected the modern economy in a plethora of different ways from robotics to agriculture \cite{Lecun2015, ghahramani2015,schwab2017,esteva2019, tyrsa2017}.
 Contemporary artificial intelligence methods based on neural networks also have the potential to enhance the role of novel analytical methods in science and engineering \cite{kaggle2014, radovic2018, butler2018, radovic2018}.
-In 2022-2023, AI and neural networks experienced remarkable advancements, sparking substantial excitement in the field, particularly with the emergence of ChatGPT-4.
-Nonetheless, the quantity of parameters in such neural networks rapidly increase, leading to a significant impact on their interpretability and, consequently, their trustworthiness.
+From 2022, AI and neural networks experienced remarkable advancements, sparking substantial excitement in the field, particularly with the emergence of Large Language Models (LLMs) such as ChatGPT-4\cite{GPT4}. In 2024, Nobel prizes in physics\cite{NobelPrizePhysics} and chemistry\cite{NobelPrizeChemistry} were awarded for foundational discoveries for developement of machine learning and applications of AI in chemistry.
+Despite such groundbreaking achievements, interpretability and trustworthiness of such NNs is very low due to the quantity of parameters in such neural networks rapidly increase.
 Paradoxically, the intrinsic mechanism of how such neural networks work and why they are so powerful remains unknown (in many cases it is regarded as universal black box oracle).
-Additionally, these black-box oracles demand substantial resources for their training and exhibit a propensity to overfit when data is scarce \cite{sevilla2022compute}, in contrast to the human ability to effectively learn from "small" data.
-It has been speculated that limits to the neural network paradigm based on the computational power of von Neumann architecture are being approached,
-and improvements appear only due to heuristic escalation of complexity \cite{marcus2018,sze2017,kourtis2020}.
+Additionally, these black-box oracles demand substantial resources for their training and exhibit a propensity to overfit when data is scarce \cite{sevilla2022compute}, in contrast to the human ability to effectively learn from "small" data. 
 
-In particular, the self-organizing feature map (SOFM) \cite{kohonen1990,kohonen1996,kohonen1997}, is a type of artificial neural network (ANN)
-that is trained in an unsupervised manner.
-SOFMs are used in many areas \cite{vilibic2016, guido1998, doszkocs1990, jones2012,mori2019,corsello2017,zhu2018,chea2016}
-and in comparison with many other artificial neural networks, they apply competitive learning and preserve the topological properties of the input space \cite{kiviluotoa1996}.
-The SOFMs represent data in a fundamentally topological way that allows one to perform dimensionality reduction.
-Once it is trained, the map can classify a vector from the input space by finding the node with the smallest distance metric.
+%It has been speculated that limits to the neural network paradigm based on the computational power of von Neumann architecture are being approached,and improvements appear only due to heuristic escalation of complexity \cite{marcus2018,sze2017,kourtis2020}.
 
-On the other hand, with recent technological advancements, quantum computation has moved beyond its academic roots.
+
+
+On the other hand, quantum computation is another fast growing area of research that is moving beyond its academic roots.
 Although, its present scale may not yet rival classical computation, there is considerable excitement within this field and high expectations for rapid developments for commercial opportunities in the near future.
-In 2022, the Nobel Prize in Physics honored groundbreaking contributions to quantum information science, the Breakthrough Prize in Fundamental Physics recognized achievements in quantum communication and quantum computing, and IBM unveiled a quantum computer of 433 qubits.
-According to their roadmaps, companies such as IBM and Origin Quantum will empower their NISQ processors with more than 1000 qubits by 2024 and 2025, respectively.
-Recently, a lot of new algorithms were developed for such devices (see \cite{Cerezo2021,Bharti2022} for comprehensive review).
-In particular, there has been much interest recently in applying quantum computing techniques to machine learning \cite{dunjko2018, biamonte2017, schuld2014, carleo2019, Benedetti2019, Cerezo2022, Sajjan2022}.
+In 2022, the Nobel Prize in Physics honored groundbreaking contributions to quantum information science\cite{NobelPrizePhysicsa}, the Breakthrough Prize in Fundamental Physics in 2023 recognized achievements in quantum communication and quantum computing\cite{BreakthroughPrizeWinners}. From practical point of view, IBM  empowered their NISQ processors with more than 1000 qubits\cite{IBMRoadmapQuantumcentric}, Google demonstrated quantum error correction below the surface code threshold\cite{acharyaQuantumErrorCorrection2024}, and QuEra ambitiously announced 100 logical qubit processor in 2026 in their roadmap\cite{QuantumErrorCorrection}.
+A lot of new algorithms were developed for such devices (see \cite{Cerezo2021,Bharti2022} for comprehensive review).
+In particular, there has been much interest recently in applying quantum computing techniques to machine learning \cite{dunjko2018, biamonte2017, schuld2014, carleo2019, Benedetti2019, Cerezo2022, Sajjan2022}. In comparison with classical ML, it was recently shown that Quantum Machine Learning (QML) models can be traine with fewer parameters in comparison with classical ANNs\cite{abbasPowerQuantumNeural2021,caroGeneralizationQuantumMachine2022}.
 The main focus of early works in quantum machine learning (QML) was in obtaining a quantum speedup \cite{biamonte2017, schuld2014} by applying quantum approaches to solve linear algebra problems, such as the Fourier transform or solving systems of linear equations \cite{wiebe2012,harrow2009,childs2017}.
 Quantum algorithms were developed for  linear regression, principal component analysis, support vector machine, K-means algorithm and others \cite{lloyd2013,lloyd2014,dunjko2016,paparo2014,rebentrost2014}.
 More recently, there has been attention on developing quantum neural networks \cite{kamruzzaman2019, schuld2014b, jeswal2019, broughton2020}.
 The interest in quantum neural networks was inspired by progress in experimental quantum computing when it became possible to use parametrized quantum circuits,
 where the parameters behave much like the weights of a neural network \cite{lewenstein1994,Benedetti2019}.
-In particular, quantum algorithms for training and evaluating feedforward neural networks were developed,
-which are one of the most usable neural network models \cite{allcock2018, tacchino2019}. Quantum models for convolutional neural networks, which may be suitable for the problems of learning of quantum states were also proposed \cite{cong2019, liu2019}. Recent results connecting the classical Bayesian approach to deep learning allowed for the development of a new algorithm for Bayesian deep learning on quantum computers \cite{zhao2019}. For the problem of classification which is closely connected to the problem of clusterization, a protocol of quantum classification, tested on the MNIST dataset, via slow feature analysis based on the use of quantum Frobenius distance was proposed \cite{kerenidis2018}.
+In particular, quantum algorithms for training and evaluating feed forward neural networks were developed,
+which are one of the most usable neural network models \cite{allcock2018, tacchino2019}. Quantum models for convolutional neural networks, which may be suitable for the problems of learning of quantum states were also proposed \cite{cong2019, liu2019}. Recent results connecting the classical Bayesian approach to deep learning allowed for the development of a new algorithm for Bayesian deep learning on quantum computers \cite{zhao2019,daiQuantumBayesianOptimization2023}. For the problem of classification which is closely connected to the problem of clusterization, a protocol of quantum classification, tested on the MNIST dataset, via slow feature analysis based on the use of quantum Frobenius distance was proposed \cite{kerenidis2018}.
 A quantum capsule network together with an efficient quantum dynamic routing algorithm was proposed \cite{Liu2022}.
-A quantum version of vision transformer architecture was developed for quantum many-body systems \cite{Viteritti2023} that provides possibilities for quantum natural language processing.
-Furthermore, many other hybrid and quantum protocols inspired classical neural networks were developed  \cite{li2019, Heese2022, killoran2019, bondarenko2019, dunjko2017, nautrup2019, foesel2018, rebentrost2018, purushothaman1997, verdon2019, cherny2019, byrnes2013, mishra2019, pyrkov2019, vinci2019, lu2019}.
+The quantum versions of transformer architecture and transformer of quantum states were developed\cite{Viteritti2023,cherratQuantumVisionTransformers2024,khatriQuixerQuantumTransformer2024,zhangTransformerQuantumState2023} that provides possibilities for quantum natural language processing. Inspired by the classical counterpart, the quantum denoising diffusion probabilistic model (QuDDPM) was proposed to enable efficiently trainable generative learning of quantum data\cite{zhangGenerativeQuantumMachine2024}.
+Furthermore, many other hybrid and quantum protocols inspired classical neural networks were developed  \cite{kolleQuantumDenoisingDiffusion2024,li2019, Heese2022, killoran2019, bondarenko2019, dunjko2017, nautrup2019, foesel2018, rebentrost2018, purushothaman1997, verdon2019, cherny2019, byrnes2013, mishra2019, pyrkov2019, vinci2019, lu2019}.
 
 At the same time, non-neural-network based hybrid quantum classical algorithms have become a new direction of significant interest \cite{mcclean2016,arute2020,akshay2020}.
 Such hybrid algorithms involve quantum circuits used for part of the execution and is typically trained in a classical learning loop.
@@ -103,7 +97,12 @@ Another example of a well-known hybrid quantum classical algorithm is the Variat
 Currently, it is believed that implementation of quantum neural networks and hybrid quantum classical algorithms can be the main test bed to achieve practical quantum supremacy on Noisy Intermediate Scale Quantum (NISQ) devices \cite{preskill2018,Bharti2022,Cerezo2021}.
 
 In this paper, we develop a hybrid quantum-assisted SOFM (QASOFM)
-and apply it to the data clustering problem in an unsupervised manner. The idea is based on the use of the Hamming distance as a distance metric for the training the SOFM that allows, in the quantum case, to reduce the number of distance calculations in the number of clusters and thus to speed up the original classical protocol.
+and apply it to the data clustering problem in an unsupervised manner. The self-organizing feature map (SOFM) \cite{kohonen1990,kohonen1996,kohonen1997}, is a type of artificial neural network (ANN)
+that is trained in an unsupervised manner.
+SOFMs are used in many areas \cite{vilibic2016, guido1998, doszkocs1990, jones2012,mori2019,corsello2017,zhu2018,chea2016}
+and in comparison with many other artificial neural networks, they apply competitive learning and preserve the topological properties of the input space \cite{kiviluotoa1996}.
+The SOFMs represent data in a fundamentally topological way that allows one to perform dimensionality reduction.
+Once it is trained, the map can classify a vector from the input space by finding the node with the smallest distance metric. The idea of QASOFM is based on the use of the Hamming distance as a distance metric for the training the SOFM that allows, in the quantum case, to reduce the number of distance calculations in the number of clusters and thus to speed up the original classical protocol.
 In order to make our protocol more appropriate for the currently available generation of NISQ quantum devices, we optimized a circuit for realizing the Hamming distance by reducing number of one-qubit operations. We then apply it to a toy example of clustering paper abstracts and give a proof-of-concept realization of the quantum assisted SOFM on the IBM Q experience quantum computer \cite{ibmq}
 and compare it to the classical case.
 
@@ -211,22 +210,11 @@ we introduce an optimized algorithm for calculating the matrix of Hamming distan
 
 
 
-\begin{figure}[t]
-  \includegraphics[width=\columnwidth]{distance_matrix.eps}
-  \caption{%
-    Result of tomography of all vector pairs that differ by up to one bit --- neighbors.
-    Distance values less than 1.7 are marked black.
-    Distance calculated by $\bar d_{ij} = (d_{ij} + d_{ji}) / 2$,
-    where $d_{ij}$ is extracted from amplitudes by~(\ref{eq:amplitudes2distance}).
-    Amplitudes obtained on the IBM quantum backend named ``ibm\_sherbrook'' with only 8192 shots.
-    Question marks and crosses indicate missing and erroneous results compared to theoretical calculations.
-    The accuracy compared to classical simulation is better than 97 $\%$.
-  }
-  \label{fig:distance_matrix}
-\end{figure}
 
 
+In the work \cite{trugenberger2001}, the concept of probabilistic quantum memory was introduced. In this framework, quantum entanglement is utilized to significantly enhance the storage capacity of associative memories and to retrieve noisy or incomplete information. Specifically, the number of binary patterns that can be stored in such a quantum memory is exponential in relation to the number $ n $ of qubits, with a maximum capacity of $ p_{\text{max}} = 2^n $. This means it can optimally store all possible binary patterns that can be formed with $ n $ bits.
 
+The retrieval process is probabilistic and involves postselection of the measurement results. This implies that the retrieval algorithm must be repeated until a certain threshold $T$ is met, or until the measurement of a control qubit yields a specific outcome. In the first scenario, the input is not recognized, while in the second, the output is determined by a probability distribution over the memory that is concentrated around the stored patterns that are closest to the input, as measured by Hamming distance. Here, we improve the approach for Hamming distance calculation proposed for realization of probabilistic quantum memory\cite{trugenberger2001} and apply it for realization of QASOFM.
 
 
 The overall procedure involves two registers of $n$ qubits each, denoted $\left| X \right\rangle$ and $\left| Y \right\rangle$, along with a single auxiliary qubit $\left| a \right\rangle$.
@@ -330,6 +318,22 @@ Applying another Hadamard on the ancilla qubit we obtain
         \left| 1 \right\rangle\right] .
 \end{multline}
 %
+
+%%%%%
+\begin{figure*}[t]
+    \centering
+  \includegraphics[width=1.85\columnwidth]{vectorized_sample.pdf}
+  \caption{
+    (a) Representation of the data set of abstracts with the bag-of-words \cite{weikang2016} model is shown.
+    Each abstract is represented by a binary vector with 9 elements, corresponding to the 9 words on the horizontal axis.
+    The samples are sorted into groups ``Quantum Machine Learning'' (QML), ``Cancer'' (MED) and ``Gene Expression'' (BIO) with 3 papers for each tag, for a total of 9 paper.
+    (b) The Hamming distance between each vectorized abstract is shown as a number in the matrix.
+  }
+  \label{fig:vectorized_sample}
+\end{figure*}
+%%%%%
+
+
 This completes the step of projecting differences between pairs of $\left| x_i \right\rangle$ and $\left| y_j \right\rangle$ onto the amplitude of the auxiliary qubit.
 The process is done in the $x$-basis, achieved by the surrounding Hadamard gates.
 There are two possible measurement outcomes of the auxiliary qubit.
@@ -356,6 +360,10 @@ At this stage, the information regarding the differences between pairs of $\left
 \end{multline}
 %
 Thus we return into the initial basis and the amplitudes of the auxiliary qubit are proportional to how different each pairs of $\left| x_i \right\rangle$ and $\left| y_j \right\rangle$ are.
+
+
+
+
 
 From the statistics of the measurement outcomes of the final state~(\ref{eq:final_state}) we recreate the amplitudes of ancilla qubit states.
 From those amplitudes estimations we are able to plot the distance matrix between two data sets of binary vectors.
@@ -384,6 +392,12 @@ From the reduced density matrix, the following two amplitudes for the measuremen
     a_1(x_i,y_j) & = \frac{\left\langle 1 |\rho_{i,j}| 1 \right\rangle}{\text{Tr}(\rho_{i,j})} .
 \end{align}
 %
+
+
+
+
+
+
 Currently available quantum platforms are still subject to a substantial level of noise and extracting the exact distance from amplitude is still a difficult task. In order to reduce noise we average the measurement results over different states of the ancillary qubit, thus the measured Hamming distance between the input vector $\left| x_i \right\rangle$ and cluster vector $\left| y_j \right\rangle$ is
 %
 \begin{equation}\label{eq:amplitudes2distance}
@@ -401,19 +415,7 @@ The number of controlled gate operations to define the full distance matrix matc
 
 
 
-%%%%%
-\begin{figure}[t]
-    \centering
-  \includegraphics[width=0.95\columnwidth]{vectorized_sample.pdf}
-  \caption{
-    (a) Representation of the data set of abstracts with the bag-of-words \cite{weikang2016} model is shown.
-    Each abstract is represented by a binary vector with 9 elements, corresponding to the 9 words on the horizontal axis.
-    The samples are sorted into groups ``Quantum Machine Learning'' (QML), ``Cancer'' (MED) and ``Gene Expression'' (BIO) with 3 papers for each tag, for a total of 9 paper.
-    (b) The Hamming distance between each vectorized abstract is shown as a number in the matrix.
-  }
-  \label{fig:vectorized_sample}
-\end{figure}
-%%%%%
+
 
 
 
@@ -435,7 +437,8 @@ The number of controlled gate operations to define the full distance matrix matc
 
 \section{Experimental demonstration of QASOFM}
 
-We now show experimental results for a proof-of-concept demonstration of the algorithm introduced in the previous section, on a 16-qubit quantum computer provided by IBM Q Experience.
+We now show experimental results for a proof-of-concept demonstration of the algorithm introduced in the previous section with the use of IBM Q Experience.
+
 We perform unsupervised data clustering for three sets of paper abstracts from three different fields:
 quantum physics \cite{qml0, qml1, qml2},
 medicine \cite{med0, med1, med2}
@@ -464,12 +467,43 @@ that are possible to realize on  quantum computing devices that are currently av
 The calculation of Hamming distance implemented step-by-step between each sample vector and all cluster vectors is realized in one operation. In this case, as there is only one input vector considered, the ``Decoding'' stage (Fig.~\ref{fig:qcircuit}) can be removed as the measurement no longer needs to indicate for which input vector the distance has been measured.
 The complexity of the quantum assisted SOFM then scales as $O(LN)$.
 
+\begin{figure}[t]
+  \includegraphics[width=\columnwidth]{distance_matrix.eps}
+  \caption{%
+    Comparison of classical and quantum calculations of Humming distance matrix. Result of tomography of all vector pairs that differ not more than one bit --- nearest neighbors.  The distances are calculated as $\bar d_{ij} = (d_{ij} + d_{ji}) / 2$,
+    where $d_{ij}$ was extracted from quantum state amplitudes with the use formula of ~(\ref{eq:amplitudes2distance}).
+    The calculations of amplitudes were implemented on the IBM quantum backend named ``ibm\_sherbrook'' with statistics of 8192 shots. Distance values less than 1.7 are marked black and coincide to the nearest neighbors.
+    Question marks and crosses indicate missing and incorrect results compared to theoretical calculations.
+    The accuracy compared to classical simulation is better than 97 $\%$.
+  }
+  \label{fig:distance_matrix}
+\end{figure}
+
+
+
 In order to check that our algorithm gives the expected results we compare it to classical calculations of the distance matrix on two data sets of binary vectors, as shown in Fig.~\ref{fig:distance_matrix}.
-We see good agreement between the distance matrices calculated classically and on the IBM Q Experience.
-The match is close, but not perfect, and we attribute it to noise in the currently available non fault-tolerant quantum processors.
+We see very good agreement between the distance matrices calculated classically and on the IBM Q Experience.
+
+
+
+%%%%%
+\begin{figure*}[t]
+  \includegraphics[width=1.85\columnwidth]{convergence.png}
+  \caption{
+    (a) Initial random binary vectors of cluster vectors (labeled as C0, C1, C2),
+    for the selected 9 words from the bag of words model.
+    (b) The result of applying our QASOFM implemented on the IBM Q Experience simulator backend.
+    Vectors mean cluster elements for BIO, MED, QML groups,
+    for the C0, C1, C2 cluster vectors, respectively.
+    (c) The evolution of label distribution on each learning epoch.
+  }
+  \label{convergence}
+\end{figure*}
+%%%%%
+
 
 An example of the QASOFM learning process is shown in Fig.~\ref{convergence}.
-Initially, the cluster vectors were randomly chosen and the label of sample distribution is shown for the zeroth epoch in Fig.~\ref{convergence}(a). In order to prepare a superposition of cluster vectors needed for the calculation of the distance matrix we use the standard initialization of QISKIT\cite{qiskit} library.
+Initially, the cluster vectors were randomly chosen and the label of sample distribution is shown for the zeroth epoch in Fig.~\ref{convergence}(a). For the cluster  vectors (binary representation of rows of Fig.\ref{convergence}a) we use the simplest basis encoding into quantum  states with the standard initialization of QISKIT\cite{rathQuantumDataEncoding2024,qiskit} library.
 Each epoch of the algorithm consists of distance calculation between all data and cluster vectors
 and requires 9 distance calculations in the  quantum implementation ($N$ in general case)
 or 27 distance calculations for classical realization
@@ -486,75 +520,47 @@ that speed up classical counterparts and can be implemented on near--term quantu
 developing distance based hybrid algorithms. Such algorithms,
 that can learn in an unsupervised manner, for categorical data such as genomic data has significant interest.
 
-%%%%%
-\begin{figure}[t]
-  \includegraphics[width=0.95\columnwidth]{convergence.png}
-  \caption{
-    (a) Initial random binary vectors of cluster vectors (labeled as C0, C1, C2),
-    for the selected 9 words from the bag of words model.
-    (b) The result of applying our QASOFM implemented on the IBM Q Experience simulator backend.
-    Vectors mean cluster elements for BIO, MED, QML groups,
-    for the C0, C1, C2 cluster vectors, respectively.
-    (c) The evolution of label distribution on each learning epoch.
-  }
-  \label{convergence}
-\end{figure}
-%%%%%
 
-\begin{figure}[t]
-  \includegraphics[width=\columnwidth]{tomography-errors-by-shots-n4.eps}
-  \caption{%
+
+\begin{figure*}[t]
+  \includegraphics[width=1.85\columnwidth]{tomography-errors-by-shots-n4-n5.eps}
+  \caption{Error in the distance matrix of QASOFM versus number of runs of the quantum backend for (a) $4$ and (b) $5$ qubits. We can see exponential decrease in error with linear increase in number of runs. 
   }
   \label{fig:tomography-errors-by-shots-n4}
-\end{figure}
-
-\begin{figure}[t]
-  \includegraphics[width=\columnwidth]{tomography-errors-by-shots-n5.eps}
-  \caption{%
-  }
-  \label{fig:tomography-errors-by-shots-n5}
-\end{figure}
+\end{figure*}
 
 
-\section{Scalability and robustness}
 
-Most quantum algorithms face three main scaling problems.
-The first is the exponential increase in the number of iterations of the quantum circuit required.
-This is not necessary in QASOFM\@.
+
+\section{Scalability Of QASOFM}
+
+For scalability of NISQ algorithms both software and hardware restrictions are important.
+
+From software point of view the main challenge is effective encoding of classical data into quantum states. In the proposed QASOFM we used the simplest basis encoding model. This model is non-efficient in the meaning of required quantum resources. Furthermore, the bag-of-word model is not optimal itself (we used it because of very small classical data needed to be embedded). The use of better word embedding models will allow to improve QASOFM performance. Also, the dimension of the input data is usually much larger than the number of cluster vectors. Consequently, the size of the subspace spanned on the cluster vectors will be negligible compared to the whole space. This in theory provides opportunities to efficiently generate quantum circuits for initialization of such superposition of sparse quantum states with smaller number of operations.
+
+The second challenge is in currently available hardware.
+In QASOFM, the ancillary qubit  accumulates the distances in phase and because of that requires to be as much connected as possible to other qubits. The topology of superconducting quantum processors,such as IBM or Google Sycamore, presents the significant limitations for that and consequently for the scaling of QASOFM algorithm to a larger problem.
+The possible solution is to create a large auxiliary network,
+but it requires a lot of two-qubit operations,
+which are currently performed with insufficient accuracy.
+Another solution is to use platforms with star architecture (all to all connected) which are under development with trapped ion technology\cite{QuantinuumsHSeriesHits}. It will higly improve performance and scalability. 
+
+Furthermore, our QASOFM allows to avoid the use exponential resource requirement at read-out operation (as for quantum tomography). 
 SOFM assumes that the cluster points do not have to move monotonically towards the cluster centroids,
 and that the vectors closest to the true BMU have the highest probability of being measured.
-The number of runs should only be chosen based on a given accuracy of BMU selection.
-It will only affect the speed of reaching the centres of the clusters.
-Fig.~\ref{fig:tomography-errors-by-shots-n4} and Fig.~\ref{fig:tomography-errors-by-shots-n5} show the dependence of the number of tomography errors of vectors
-which differ by no more than one bit (see Fig.~\ref{fig:distance_matrix}) on the number of shots.
-Here, tomography implies the determination of all pairs of nearest vectors in the whole state space.
-In Fig.~\ref{fig:tomography-errors-by-shots-n4} shows the state space of $2^4$ vectors, and Fig.~\ref{fig:tomography-errors-by-shots-n5} --- $2^5$ vectors.
-The points in Fig.~\ref{fig:tomography-errors-by-shots-n4} and Fig.~\ref{fig:tomography-errors-by-shots-n5} are the number of misidentified neighbors
-by the quantum circuit run on a noise simulator taking into account parameters of the real quantum platform.
+Thus, the number of runs should only be chosen to measure distances to nearest neighbors with high accuracy, not all possible distance calculations. The protocol implies finding of all pairs of nearest vectors in the whole state space.
+Fig.~\ref{fig:tomography-errors-by-shots-n4} shows the error versus number of runs for determination of distance matrix for $4$  and $5$ qubits respectively.
+The points in Fig.~\ref{fig:tomography-errors-by-shots-n4} define the number of errors in neighbors
+by the quantum circuit runs on a noise simulator taking into account parameters of the real quantum platform.
 The lines are the result of a regression analysis of these data.
-The coefficient of determination of the model is $R^2 = 0.82$ for the state space of $2^4$ and $R^2 = 0.9$ for $2^5$.
-The triangles are the number of neighbors misidentified by the quantum scheme run on the IBM quantum backend named ``ibm\_sherbrook''.
-The number of errors decreases exponentially as the number of shots increases linearly.
-In contrast to QASOFM,
-tomography with increasing state space requires an exponential increase in the number of shots
-to distinguish neighbors of different orders.
+The coefficient of determination of the model is $R^2 = 0.86$ for the state space of $4$ qubits and $R^2 = 0.92$ for $5$ qubits.
+The triangles are the number of errors by the quantum scheme run on the IBM quantum backend named ``ibm\_sherbrook''.
+The number of errors decreases exponentially as the number of shots increases linearly. This provide advantage for our protocol in read out.
 
-The second problem is a linear increase in a number of connections required for a single qubit.
-In QASOFM, this is the ancilla that accumulates distances in phase.
-Currently, this is a significant limitation for scaling on platforms with a rigid topology,
-such as IBM or Google Sycamore processors.
-For this reason, we cannot implement an algorithm for a larger problem.
-The only solution is to create a large auxiliary network,
-but this requires numerous two-qubit operations,
-which are currently performed with insufficient accuracy.
-Other approaches to implementing the quantum platform,
-for example for ions in traps or Bose-Einstein condensates,
-are likely to overcome this limitation.
 
-The third problem is the difficulty of converting digital data into a quantum state.
-The dimension of the data is usually much larger than the number of cluster vectors.
-Consequently, the size of the subspace stretched over the cluster vectors will be negligible compared to the whole space.
-This makes it possible to efficiently generate quantum circuits to initialise such superposition quantum states.
+
+
+
 
 
 \section{Discussions}
@@ -572,15 +578,15 @@ and $L$ is number of the shifts of cluster vectors.
 Due to wide use of classical SOFMs in different areas of modern research and technology,
 this can give opportunities for the use of QASOFM in practical applications in the near term, outperforming classical algorithms.
 In addition, as our algorithm performs the Hamming distance calculation,
-it has the potential to enhance any classical algorithm that relies on calculating distances between data entries of vector form.
-In machine learning, data science, statistics and optimization, distance is a common way of representing similarity, calculating it between large data sets is common procedure
-and our circuit could potentially enhance other distance-based algorithms as long as exact distance is not required,
+it has the potential to enhance any classical algorithm that relies on calculating distances between binary data. In particular, nowadays a lot of algorithms are under development for quantized datasets with binary embeddings\cite{zhuangFastTrainingTripletBased2016,yiBinaryEmbeddingFundamental2015,AsymmetricDistancesBinary}. Furthermore, recently quantum protocols for euclidean distance calculations were introduced\cite{yuQuantumAlgorithmsSimilarity2020,zardiniQuantumKnearestNeighbors2024} that allows to generalize QASOFM to non-binary data. In machine learning, data science, statistics and optimization, distance is a common way of representing similarity, calculating it between large data sets is common procedure
+and our circuit could potentially enhance other distance based algorithms for binary data  as long as exact distance is not required,
 but when knowledge of nearest vectors is sufficient.
 
 
 
 \section*{Acknowledgments}
-The work was performed as a part of a state task, State Registration No. AAAA-A19-119071190017-7.
+The work was partly supported by the
+Russian Science Foundation (grant no 23-21-00507) and partly performed as a part of a state task, State Registration No. 124013000760-0.
 T.B. is supported by the National Natural Science Foundation of China (62071301);
 NYU-ECNU Institute of Physics at NYU Shanghai;
 Shanghai Frontiers Science Center of Artificial Intelligence and Deep Learning;
@@ -594,7 +600,9 @@ and the SMEC Scientific Research Innovation Project (2023ZKZD55).
 
 %I.D.L. and A.N.P. performed the calculations. All authors discussed the results and wrote the paper.
 
+\section*{Data Availability Statement}
 
+The source code is available on https://github.com/kephircheek/qasofm 
 
 
 
@@ -607,6 +615,6 @@ The authors declare no conflict of interest.
 quantum self-organizing feature map; quantum machine learning; neural network; quantum unsupervised data clustering; Hamming distance.
 
 \bibliographystyle{naturemag}
-\bibliography{bibliography}
+\bibliography{bibliography,bibl}
 
 \end{document}
