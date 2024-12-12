@@ -574,7 +574,7 @@ Thus, the number of runs should only be chosen to measure distances to nearest n
 Fig.~\ref{fig:tomography-errors-by-shots-n4} shows the error versus number of runs for determination of the distance matrix for $4$  and $5$ qubits.
 The points show the number of errors in the neighbors versus the the number of quantum circuit runs using a noise simulator using real parameters.  The number of errors decrease exponentially with the number of shots, which shows the efficient performance of our algorithm with respect to read-out.
 
-Another challenge relates to the connectivity limitations of currently available quantum computers. In QASOFM, the ancilla qubit accumulates the distances in the phase information and as such it ideally requires a high connectivity to the $X $ register.  The topology of currently available superconducting quantum processors  presents a significant limitation and consequently to the scaling of the QASOFM algorithm.  A possible solution is to create a large auxiliary network,
+Another challenge relates to the connectivity limitations of currently available quantum computers. In QASOFM, the ancilla qubit accumulates the distances in the phase information and as such it ideally requires a high connectivity to the $X $ register.  The topology of currently available superconducting quantum processors  presents a significant limitation to connectivity and consequently to the scaling of the QASOFM algorithm.  A possible solution is to create a large auxiliary network,
 but it requires many two-qubit operations, which reduces the accuracy.
 Another solution is to use platforms with a star architecture (or all to all connected) which are under development with trapped ion technology \cite{QuantinuumsHSeriesHits}.
 
