@@ -47,6 +47,10 @@ pip install ipykernel
 python -m ipykernel install --name qasofm-py3.8 --user
 ```
 
+*NB! Later you can remove the kernel with the command*
+```shell
+jupyter kernelspec remove qasofm-py3.8
+```
 
 ### Set proxy configuration for Qiskit if necessary
 
