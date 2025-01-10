@@ -1,6 +1,6 @@
 # Hybrid quantum-classical unsupervised data clustering based on the Self-Organizing Feature Map
 
-Quantum assisted Self-Organizing Feature Map
+Ilia D. Lazarev, Marek Narozniak, Tim Byrnes, Alexey N. Pyrkov
 
 Unsupervised machine learning is one of the main techniques employed in artificial intelligence.
 Quantum computers offer opportunities to speed up such machine learning techniques.
