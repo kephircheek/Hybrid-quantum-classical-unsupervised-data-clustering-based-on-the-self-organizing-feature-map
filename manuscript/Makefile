@@ -2,7 +2,11 @@
 
 .PHONY: clean
 clean:
-	git clean -fx main*
+	git clean -xf *converted-to.pdf *.blg *.log *.aux *.zip mainNotes.bib
+
+.PHONY: compress
+compress: clean
+	zip -r manusript.zip . -x "Makefile"
 
 %.aux: %.tex
 	pdflatex $<
